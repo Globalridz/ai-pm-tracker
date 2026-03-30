@@ -1,0 +1,35 @@
+name: Auto-update AI PM Tracker
+
+on:
+  schedule:
+    - cron: '0 9 * * 1'  # Every Monday at 9am UTC
+  workflow_dispatch:       # Also lets you trigger manually from GitHub
+
+jobs:
+  update:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repo
+        uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+
+      - name: Install dependencies
+        run: pip install anthropic requests
+
+      - name: Run update script
+        env:
+          ANTHROPIC_API_KEY: ${{ secrets.ANTHROPIC_API_KEY }}
+        run: python update_tracker.py
+
+      - name: Commit and push if changed
+        run: |
+          git config user.name  "AI PM Tracker Bot"
+          git config user.email "bot@ai-pm-tracker"
+          git add releases.json
+          git diff --staged --quiet || git commit -m "Auto-update: $(date +'%b %d, %Y')"
+          git push
