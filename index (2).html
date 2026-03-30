@@ -1,0 +1,1680 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="description" content="AI PM Release Tracker — Anthropic and OpenAI releases, annotated for Product Managers">
+<title>AI PM Release Tracker</title>
+<link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>🚀</text></svg>">
+<link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=DM+Mono:wght@300;400;500&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet">
+<style>
+
+  /* ── OpenAI / ChatGPT theme (default) ── */
+  :root {
+    --bg: #212121;
+    --surface: #2f2f2f;
+    --surface2: #3a3a3a;
+    --border: rgba(255,255,255,0.08);
+    --text: #ececec;
+    --muted: #8e8ea0;
+    --accent-color: #10a37f;
+    --accent-dim: rgba(16,163,127,0.13);
+    --pill-bg: #2f2f2f;
+    --pill-border: rgba(255,255,255,0.1);
+    --card-hover: rgba(255,255,255,0.03);
+    --card-bar: #10a37f;
+    --insight-bg: rgba(16,163,127,0.08);
+    --insight-border: rgba(16,163,127,0.2);
+    --insight-text: #7ecfb8;
+    --insight-label: #10a37f;
+    --tag-border: rgba(255,255,255,0.09);
+    --tag-text: #666;
+    --stat-text: #ececec;
+    --topbar-bg: #212121;
+    --active-pill-bg: #10a37f;
+    --active-pill-text: #fff;
+    --month-active-bg: #3a3a3a;
+    --month-active-text: #ececec;
+    --transition: background 0.35s ease, color 0.35s ease, border-color 0.35s ease;
+  }
+
+  /* ── Claude theme ── */
+  body.theme-claude {
+    --bg: #F5F0E8;
+    --surface: #FDFAF4;
+    --surface2: #EDE8DC;
+    --border: rgba(0,0,0,0.08);
+    --text: #1a1208;
+    --muted: #8a7d6b;
+    --accent-color: #CC785C;
+    --accent-dim: rgba(204,120,92,0.12);
+    --pill-bg: #EDE8DC;
+    --pill-border: rgba(0,0,0,0.1);
+    --card-hover: rgba(204,120,92,0.06);
+    --card-bar: #CC785C;
+    --insight-bg: rgba(204,120,92,0.07);
+    --insight-border: rgba(204,120,92,0.2);
+    --insight-text: #7a4a30;
+    --insight-label: #CC785C;
+    --tag-border: rgba(0,0,0,0.1);
+    --tag-text: #8a7d6b;
+    --stat-text: #CC785C;
+    --topbar-bg: #FDFAF4;
+    --active-pill-bg: rgba(204,120,92,0.15);
+    --active-pill-text: #CC785C;
+    --month-active-bg: #EDE8DC;
+    --month-active-text: #1a1208;
+  }
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  body {
+    background: var(--bg);
+    color: var(--text);
+    font-family: 'DM Sans', sans-serif;
+    min-height: 100vh;
+    padding: 0;
+    font-size: 15px;
+    line-height: 1.5;
+    transition: var(--transition);
+  }
+
+  /* ChatGPT uses a clean system/Söhne-like sans; Claude uses a warmer serif-adjacent feel */
+  body:not(.theme-claude) {
+    font-family: ui-sans-serif, -apple-system, system-ui, "Segoe UI", Helvetica, Arial, sans-serif;
+    letter-spacing: -0.01em;
+  }
+  body.theme-claude {
+    font-family: 'DM Sans', Georgia, sans-serif;
+  }
+
+  /* HEADER */
+  .header {
+    padding: 32px 32px 28px;
+    border-bottom: 1px solid var(--border);
+    background: var(--bg);
+    transition: var(--transition);
+    text-align: center;
+  }
+  .header-eyebrow {
+    font-family: 'DM Mono', monospace;
+    font-size: 11px;
+    letter-spacing: 0.18em;
+    color: var(--muted);
+    text-transform: uppercase;
+    margin-bottom: 14px;
+  }
+  .header-title {
+    font-family: 'Syne', sans-serif;
+    font-size: clamp(22px, 4vw, 36px);
+    font-weight: 800;
+    line-height: 1.15;
+    color: var(--text);
+    margin-bottom: 10px;
+    max-width: 700px;
+    margin-left: auto;
+    margin-right: auto;
+  }
+  #brand-highlight {
+    color: var(--accent-color);
+  }
+  .header-date {
+    font-family: 'DM Mono', monospace;
+    font-size: 12px;
+    color: var(--muted);
+    margin-bottom: 24px;
+  }
+  /* STATS ROW */
+  .stats-row {
+    display: flex;
+    gap: 40px;
+    justify-content: center;
+    flex-wrap: wrap;
+  }
+  .stat-block {
+    text-align: center;
+  }
+  .stat-num {
+    font-family: 'Syne', sans-serif;
+    font-size: 28px;
+    font-weight: 800;
+    color: var(--accent-color);
+    line-height: 1;
+    margin-bottom: 4px;
+  }
+  .stat-label {
+    font-family: 'DM Mono', monospace;
+    font-size: 10px;
+    color: var(--muted);
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+  }
+
+  /* STATS ROW */
+  .stats-row {
+    display: flex;
+    gap: 20px;
+    flex-wrap: wrap;
+  }
+  .stat-pill {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    padding: 10px 16px;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    transition: var(--transition);
+  }
+  .stat-num {
+    font-family: 'Syne', sans-serif;
+    font-size: 22px;
+    font-weight: 700;
+    color: var(--stat-text);
+  }
+  .stat-num.cl { color: #CC785C; }
+  .stat-num.oa { color: #10a37f; }
+  .stat-label {
+    font-size: 11px;
+    color: var(--muted);
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    line-height: 1.3;
+  }
+
+  /* TOP BAR — centered brand toggle only */
+  .top-bar {
+    position: sticky;
+    top: 0;
+    z-index: 20;
+    background: var(--topbar-bg);
+    border-bottom: 1px solid var(--border);
+    padding: 10px 20px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: var(--transition);
+  }
+  .top-bar-left { display: flex; align-items: center; }
+
+  /* MONTH NAV — inline above releases */
+  .month-nav-inline {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    padding: 16px 0 16px;
+    border-bottom: 1px solid var(--border);
+  }
+  .month-nav-arrow {
+    background: none;
+    border: 1px solid var(--border);
+    color: var(--muted);
+    width: 28px;
+    height: 28px;
+    border-radius: 6px;
+    cursor: pointer;
+    font-size: 16px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: all 0.15s;
+    flex-shrink: 0;
+    line-height: 1;
+  }
+  .month-nav-arrow:hover:not(:disabled) { color: var(--text); border-color: var(--accent-color); }
+  .month-nav-arrow:disabled { opacity: 0.25; cursor: default; }
+  .month-nav-track {
+    display: flex;
+    gap: 6px;
+    overflow-x: auto;
+    flex: 1;
+    scroll-behavior: smooth;
+    -ms-overflow-style: none;
+    scrollbar-width: none;
+    padding-bottom: 2px;
+  }
+  .month-nav-track::-webkit-scrollbar { display: none; }
+  .month-pill {
+    font-family: 'DM Mono', monospace;
+    font-size: 11px;
+    padding: 5px 13px;
+    border-radius: 20px;
+    border: 1px solid var(--border);
+    background: transparent;
+    color: var(--muted);
+    cursor: pointer;
+    transition: all 0.15s;
+    letter-spacing: 0.04em;
+    white-space: nowrap;
+    flex-shrink: 0;
+  }
+  .month-pill:hover:not(.no-data):not(.upcoming) { color: var(--text); border-color: rgba(255,255,255,0.2); }
+  body.theme-claude .month-pill:hover:not(.no-data):not(.upcoming) { border-color: rgba(0,0,0,0.2); }
+  .month-pill.active {
+    background: var(--surface2);
+    color: var(--text);
+    border-color: var(--accent-color);
+  }
+  .month-pill.has-data::after {
+    content: '';
+    display: inline-block;
+    width: 5px; height: 5px;
+    border-radius: 50%;
+    background: var(--accent-color);
+    margin-left: 6px;
+    vertical-align: middle;
+    opacity: 0.7;
+  }
+  .month-pill.no-data { opacity: 0.3; cursor: default; }
+  .month-pill.upcoming { font-style: italic; opacity: 0.4; cursor: default; }
+
+  /* AGENTIC BADGE on cards */
+  .agentic-badge {
+    font-family: 'DM Mono', monospace;
+    font-size: 9px;
+    font-weight: 600;
+    padding: 2px 7px;
+    border-radius: 20px;
+    background: rgba(168,85,247,0.12);
+    color: #a855f7;
+    border: 1px solid rgba(168,85,247,0.25);
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    flex-shrink: 0;
+  }
+
+  /* BRAND PILL TOGGLE */
+  .brand-tabs { display: none; }
+  .pill-toggle {
+    display: flex;
+    background: var(--pill-bg);
+    border: 1px solid var(--pill-border);
+    border-radius: 50px;
+    padding: 4px;
+    gap: 2px;
+    transition: var(--transition);
+  }
+  .brand-tab {
+    font-family: 'DM Sans', sans-serif;
+    font-size: 13px;
+    font-weight: 600;
+    padding: 8px 22px;
+    border: none;
+    background: transparent;
+    color: var(--muted);
+    cursor: pointer;
+    transition: all 0.2s;
+    border-radius: 50px;
+    display: flex;
+    align-items: center;
+    gap: 7px;
+    white-space: nowrap;
+  }
+  .brand-tab:hover { color: var(--text); }
+  .brand-tab.active-claude {
+    background: var(--active-pill-bg);
+    color: var(--active-pill-text);
+    box-shadow: 0 1px 4px rgba(0,0,0,0.15);
+  }
+  .brand-tab.active-openai {
+    background: var(--active-pill-bg);
+    color: var(--active-pill-text);
+    box-shadow: 0 1px 4px rgba(0,0,0,0.15);
+  }
+  .tab-count {
+    font-family: 'DM Mono', monospace;
+    font-size: 10px;
+    font-weight: 400;
+    padding: 1px 6px;
+    border-radius: 20px;
+    background: rgba(128,128,128,0.15);
+  }
+
+  /* MAIN TIMELINE */
+  .timeline-container {
+    padding: 32px 32px 64px;
+    max-width: 900px;
+  }
+
+  .month-header {
+    font-family: 'Syne', sans-serif;
+    font-size: 13px;
+    font-weight: 700;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: var(--muted);
+    padding: 20px 0 12px;
+    border-top: 1px solid var(--border);
+    margin-top: 8px;
+  }
+  .month-header:first-child { border-top: none; margin-top: 0; }
+
+  .release-card {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    padding: 18px 20px;
+    margin-bottom: 10px;
+    display: flex;
+    gap: 16px;
+    cursor: pointer;
+    transition: background 0.3s ease, border-color 0.2s, transform 0.2s;
+    position: relative;
+    overflow: hidden;
+  }
+  .release-card::before {
+    content: '';
+    position: absolute;
+    left: 0; top: 0; bottom: 0;
+    width: 3px;
+    border-radius: 3px 0 0 3px;
+    background: var(--card-bar);
+  }
+  .release-card:hover { border-color: var(--accent-color); transform: translateY(-1px); background: var(--card-hover); }
+
+  .card-left {
+    flex-shrink: 0;
+    width: 52px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 6px;
+  }
+  .card-date {
+    font-family: 'DM Mono', monospace;
+    font-size: 10px;
+    color: var(--muted);
+    text-align: center;
+    line-height: 1.2;
+  }
+  .brand-dot {
+    width: 8px; height: 8px;
+    border-radius: 50%;
+    flex-shrink: 0;
+    margin-top: 4px;
+    background: var(--accent-color);
+  }
+
+  .card-body { flex: 1; }
+  .card-top {
+    display: flex;
+    align-items: flex-start;
+    gap: 10px;
+    margin-bottom: 6px;
+    flex-wrap: wrap;
+  }
+  .card-title {
+    font-family: 'Syne', sans-serif;
+    font-size: 15px;
+    font-weight: 700;
+    line-height: 1.3;
+    flex: 1;
+    color: var(--text);
+  }
+  .brand-tag {
+    font-family: 'DM Mono', monospace;
+    font-size: 10px;
+    padding: 3px 8px;
+    border-radius: 4px;
+    font-weight: 500;
+    letter-spacing: 0.06em;
+    white-space: nowrap;
+    flex-shrink: 0;
+    background: var(--accent-dim);
+    color: var(--accent-color);
+  }
+
+  .card-desc {
+    font-size: 13px;
+    color: var(--muted);
+    line-height: 1.55;
+    margin-bottom: 10px;
+  }
+  .pm-insight {
+    background: var(--insight-bg);
+    border: 1px solid var(--insight-border);
+    border-radius: 6px;
+    padding: 8px 12px;
+    font-size: 12px;
+    color: var(--insight-text);
+    line-height: 1.5;
+  }
+  .pm-insight::before {
+    content: '⚡ PM Take: ';
+    font-weight: 600;
+    color: var(--insight-label);
+    font-family: 'DM Mono', monospace;
+    font-size: 11px;
+  }
+  .tag-row {
+    display: flex;
+    gap: 6px;
+    flex-wrap: wrap;
+    margin-top: 10px;
+  }
+  .tag {
+    font-family: 'DM Mono', monospace;
+    font-size: 10px;
+    padding: 2px 8px;
+    border-radius: 20px;
+    border: 1px solid var(--tag-border);
+    color: var(--tag-text);
+    letter-spacing: 0.04em;
+  }
+
+  /* HIDDEN STATE */
+  .release-card.hidden { display: none; }
+
+  /* NO RESULTS */
+  .no-results {
+    text-align: center;
+    padding: 60px 20px;
+    color: var(--muted);
+    font-family: 'DM Mono', monospace;
+    font-size: 13px;
+    display: none;
+  }
+
+  /* CONTRIBUTORS */
+  .contributors-row {
+    margin-top: 24px;
+  }
+  .contributor-group {
+    display: flex;
+    gap: 16px;
+    justify-content: center;
+    flex-wrap: wrap;
+  }
+  .contributor {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 4px;
+    text-decoration: none;
+    opacity: 0.82;
+    transition: opacity 0.15s, transform 0.15s;
+  }
+  .contributor:hover { opacity: 1; transform: translateY(-2px); }
+  .avatar, img.avatar {
+    width: 44px;
+    height: 44px;
+    border-radius: 50%;
+    display: block;
+    flex-shrink: 0;
+    border: 2px solid rgba(255,255,255,0.12);
+    object-fit: cover;
+  }
+  body.theme-claude .avatar { border-color: rgba(204,120,92,0.3); }
+  .contributor span {
+    font-family: 'DM Mono', monospace;
+    font-size: 10px;
+    color: var(--muted);
+    letter-spacing: 0.02em;
+  }
+  .contrib-role {
+    font-family: 'DM Mono', monospace;
+    font-size: 9px !important;
+    color: var(--accent-color) !important;
+    opacity: 0.8;
+    letter-spacing: 0.05em;
+  }
+
+  /* REDDIT SECTION */
+  .reddit-section {
+    padding: 32px 32px 64px;
+    max-width: 900px;
+    border-top: 1px solid var(--border);
+  }
+  .reddit-header {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    margin-bottom: 20px;
+  }
+  .reddit-header-title {
+    font-family: 'Syne', sans-serif;
+    font-size: 13px;
+    font-weight: 700;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: var(--muted);
+  }
+  .reddit-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+    gap: 12px;
+  }
+  .reddit-card {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    padding: 14px 16px;
+    transition: border-color 0.2s;
+  }
+  .reddit-card:hover { border-color: rgba(255,69,0,0.4); }
+  .reddit-meta {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    margin-bottom: 8px;
+  }
+  .reddit-sub {
+    font-family: 'DM Mono', monospace;
+    font-size: 10px;
+    color: #FF4500;
+    font-weight: 600;
+    letter-spacing: 0.04em;
+  }
+  .reddit-votes {
+    font-family: 'DM Mono', monospace;
+    font-size: 10px;
+    color: var(--muted);
+    margin-left: auto;
+  }
+  .reddit-quote {
+    font-size: 12.5px;
+    color: var(--text);
+    line-height: 1.55;
+    font-style: italic;
+    margin-bottom: 10px;
+    opacity: 0.9;
+  }
+  .reddit-topic {
+    font-family: 'DM Mono', monospace;
+    font-size: 10px;
+    color: var(--muted);
+    padding: 2px 8px;
+    border-radius: 20px;
+    border: 1px solid var(--tag-border);
+    display: inline-block;
+  }
+  .sentiment-row {
+    display: flex;
+    gap: 6px;
+    margin-top: 10px;
+    align-items: center;
+  }
+  .sentiment-emoji { font-size: 12px; }
+  .sentiment-track {
+    flex: 1;
+    height: 3px;
+    background: var(--surface2);
+    border-radius: 2px;
+    overflow: hidden;
+  }
+  .sentiment-fill { height: 100%; border-radius: 2px; }
+  .sentiment-fill.pos { background: #22c55e; }
+  .sentiment-fill.neg { background: #ef4444; }
+  .sentiment-fill.mix { background: #f59e0b; }
+  .sentiment-pct {
+    font-family: 'DM Mono', monospace;
+    font-size: 10px;
+    color: var(--muted);
+    width: 28px;
+    text-align: right;
+  }
+
+  /* TWEETS SECTION */
+  .tweets-section {
+    padding: 28px 32px 8px;
+    max-width: 900px;
+    border-top: 1px solid var(--border);
+  }
+  .tweets-header {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    margin-bottom: 16px;
+    color: var(--muted);
+  }
+  .tweets-header-title {
+    font-family: 'Syne', sans-serif;
+    font-size: 13px;
+    font-weight: 700;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: var(--muted);
+  }
+  .tweets-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+    gap: 12px;
+  }
+  .tweet-card {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    padding: 14px 16px;
+    text-decoration: none;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    transition: border-color 0.2s, transform 0.15s;
+    cursor: pointer;
+  }
+  .tweet-card:hover { border-color: var(--accent-color); transform: translateY(-1px); }
+  .tweet-meta {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+  }
+  .tweet-avatar {
+    width: 36px;
+    height: 36px;
+    border-radius: 50%;
+    object-fit: cover;
+    flex-shrink: 0;
+    border: 1.5px solid var(--border);
+  }
+  .tweet-author {
+    display: flex;
+    flex-direction: column;
+    gap: 1px;
+    flex: 1;
+    min-width: 0;
+  }
+  .tweet-name {
+    font-family: 'DM Sans', sans-serif;
+    font-size: 13px;
+    font-weight: 700;
+    color: var(--text);
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+  .tweet-handle {
+    font-family: 'DM Mono', monospace;
+    font-size: 10px;
+    color: var(--muted);
+    white-space: nowrap;
+  }
+  .tweet-x-icon {
+    color: var(--muted);
+    opacity: 0.5;
+    flex-shrink: 0;
+  }
+  .tweet-text {
+    font-size: 13px;
+    color: var(--text);
+    line-height: 1.55;
+    margin: 0;
+    opacity: 0.9;
+  }
+  .tweet-stats {
+    display: flex;
+    gap: 12px;
+    font-family: 'DM Mono', monospace;
+    font-size: 10px;
+    color: var(--muted);
+    padding-top: 8px;
+    border-top: 1px solid var(--border);
+  }
+
+  /* SIGNAL CARDS — upcoming/intel cards */
+  .signal-card {
+    border-style: dashed !important;
+    opacity: 0.88;
+  }
+  .signal-card .card-date {
+    opacity: 0.6;
+  }
+  .signal-badge {
+    font-family: 'DM Mono', monospace;
+    font-size: 9px;
+    font-weight: 600;
+    padding: 2px 7px;
+    border-radius: 20px;
+    background: rgba(251,191,36,0.12);
+    color: #f59e0b;
+    border: 1px solid rgba(251,191,36,0.3);
+    letter-spacing: 0.05em;
+    text-transform: uppercase;
+    margin-left: 6px;
+    vertical-align: middle;
+    flex-shrink: 0;
+  }
+  .confirmed-badge {
+    background: rgba(34,197,94,0.1) !important;
+    color: #22c55e !important;
+    border-color: rgba(34,197,94,0.3) !important;
+  }
+  .tweets-disclaimer {
+    font-family: 'DM Mono', monospace;
+    font-size: 9px;
+    color: var(--muted);
+    opacity: 0.5;
+    margin-left: auto;
+    letter-spacing: 0.04em;
+  }
+  .tweet-card.hidden-tweet { display: none; }
+
+  ::-webkit-scrollbar { width: 5px; }
+  ::-webkit-scrollbar-track { background: var(--bg); }
+  ::-webkit-scrollbar-thumb { background: var(--surface2); border-radius: 3px; }
+
+  /* LOADING STATE */
+  .loading-screen {
+    position: fixed; inset: 0;
+    background: var(--bg);
+    display: flex; flex-direction: column;
+    align-items: center; justify-content: center;
+    gap: 16px; z-index: 100;
+    transition: opacity 0.4s;
+  }
+  .loading-screen.done { opacity: 0; pointer-events: none; }
+  .loading-spinner {
+    width: 32px; height: 32px;
+    border: 2px solid var(--border);
+    border-top-color: var(--accent-color);
+    border-radius: 50%;
+    animation: spin 0.8s linear infinite;
+  }
+  @keyframes spin { to { transform: rotate(360deg); } }
+  .loading-text {
+    font-family: 'DM Mono', monospace;
+    font-size: 11px; color: var(--muted);
+    letter-spacing: 0.1em; text-transform: uppercase;
+  }
+  /* MONTH NARRATIVE */
+  .month-narrative {
+    margin: 20px 0 4px;
+    padding: 20px 24px;
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    border-left: 3px solid var(--accent-color);
+  }
+  .narrative-headline {
+    font-family: 'Syne', sans-serif;
+    font-size: 17px;
+    font-weight: 800;
+    color: var(--text);
+    line-height: 1.3;
+    margin-bottom: 10px;
+  }
+  .narrative-body {
+    font-size: 13px;
+    color: var(--muted);
+    line-height: 1.7;
+    margin-bottom: 16px;
+  }
+  .narrative-stats {
+    display: flex;
+    gap: 24px;
+    flex-wrap: wrap;
+    padding: 14px 0 14px;
+    border-top: 1px solid var(--border);
+    border-bottom: 1px solid var(--border);
+    margin-bottom: 14px;
+  }
+  .narrative-stat-num {
+    font-family: 'Syne', sans-serif;
+    font-size: 20px;
+    font-weight: 800;
+    color: var(--accent-color);
+    line-height: 1;
+    margin-bottom: 3px;
+  }
+  .narrative-stat-label {
+    font-family: 'DM Mono', monospace;
+    font-size: 9px;
+    color: var(--muted);
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+  }
+  .narrative-tags {
+    display: flex;
+    gap: 8px;
+    flex-wrap: wrap;
+  }
+  /* LAST UPDATED FOOTER */
+  .site-footer {
+    text-align: center;
+    padding: 24px 32px 40px;
+    font-family: 'DM Mono', monospace;
+    font-size: 10px;
+    color: var(--muted);
+    opacity: 0.5;
+    letter-spacing: 0.05em;
+    border-top: 1px solid var(--border);
+  }
+</style>
+<script>
+window.__D=(function(){try{return JSON.parse(atob([
+    "eyJtZXRhIjp7Imxhc3RVcGRhdGVkIjoiMjAyNi0wMy0yOSIsImRlc2NyaXB0aW9uIjoiQUkgUE0gUmVsZWFzZSBUcmFja2VyIFx1MjAxNCBBbnRocm9waWMgJiBPcGVuQUksIFBNLWFubm90YXRlZCIsInZlcnNpb24iOiIxLjAifSwicmVsZWFzZXMiOlt7ImJyYW5kIjoiY2xhdWRlIiwibW9udGgiOiJtYXIiLCJkYXRlIjoiTWFyIDI3IiwiZGF5IjoyNywidGl0bGUiOiJDbGF1ZGUgTXl0aG9zIFx1MjAxNCBFYXJseSBBY2Nlc3MgUGlsb3QiLCJkZXNjIjoiQWNjaWRlbnRhbCBDTVMgZXhwb3N1cmUgcmV2ZWFsZWQgXCJDbGF1ZGUgTXl0aG9zXCIgXHUyMDE0IEFudGhyb3BpYydzIG5leHQtZ2VuZXJhdGlvbiBtb2RlbCBjdXJyZW50bHkgaW4gZWFybHkgY3VzdG9tZXIgcGlsb3QuIERlc2NyaWJlZCBhcyBcInRoZSBtb3N0IGNhcGFibGUgd2UndmUgYnVpbHQuXCIgQWRkcyBhIGZvdXJ0aCB0aWVyIGFib3ZlIE9wdXMuIENhcHliYXJhIGVkaXRpb24gcmVwb3J0ZWRseSBcImRyYW1hdGljYWxseSBiZXR0ZXJcIiBhdCBjb2RpbmcgYW5kIHNlY3VyaXR5LiBGb3JtYWwgbGF1bmNoIFRCRC4iLCJwbUluc2lnaHQiOiJBIG5ldyB0b3AgdGllciBhYm92ZSBPcHVzIGNoYW5nZXMgdGhlIHNlZ21lbnRhdGlvbiBtb2RlbC4gXCJGcm9udGllciArIHByZW1pdW0gcHJpY2luZ1wiIGlzIGEgQjJCIHN0cmF0ZWd5IFx1MjAxNCB0aGluayBzcGVjaWFsaXplZCBzZWN1cml0eSwgZGVmZW5zZSwgc292ZXJlaWduIHdlYWx0aCBmdW5kIHVzZSBjYXNlcy4gVGhlIGFjY2lkZW50YWwgbGVhayBpcyBhY3R1YWxseSB1c2VmdWwgc2lnbmFsOiBpdCB0ZWxscyBQTXMgdGhlIG1vZGVsIGlzIHJlYWwgYW5kIGltbWluZW50LiIsInRhZ3MiOlsibW9kZWxzIiwiZnJvbnRpZXIiLCJzZWN1cml0eSIsInVwY29taW5nIl0sInNpZ25hbCI6InNpZ25hbCIsImlzU2lnbmFsIjpmYWxzZX0seyJicmFuZCI6ImNsYXVkZSIsIm1vbnRoIjoibWFyIiwiZGF0ZSI6Ik1hciB+MjYiLCJkYXkiOjI2LCJ0aXRsZSI6IkNsYXVkZSBIYWlrdSA0LjUgXHUyMDE0IEZhc3Rlc3QgTW9kZWwgTGF1bmNoIiwiZGVzYyI6IkZhc3Rlc3QgSGFpa3UgeWV0IHdpdGggbmVhci1mcm9udGllciBwZXJmb3JtYW5jZS4gSWRlYWwgZm9yIHJlYWwtdGltZSwgaGlnaC12b2x1bWUsIGNvc3Qtc2Vuc2l0aXZlIGRlcGxveW1lbnRzLiBTdHJ1Y3R1cmVkIG91dHB1dHMgR0EuIENsYXVkZSBIYWlrdSAzIGRlcHJlY2F0ZWQgKHJldGlyZW1lbnQgQXByIDE5LCAyMDI2KS4iLCJwbUluc2lnaHQiOiJIYWlrdSBpcyB0aGUgbW9kZWwgZm9yIGhpZ2gtdm9sdW1lIGNvbnN1bWVyIGZlYXR1cmVzIFx1MjAxNCBldmVyeSBhdXRvY29tcGxldGUsIHJlYWwtdGltZSBzdWdnZXN0aW9uLCBiYWNrZ3JvdW5kIGNsYXNzaWZpY2F0aW9uIHRoYXQgbmVlZHMgdG8gYmUgY2hlYXAgYW5kIGZhc3QuIFRoZSBkZXByZWNhdGlvbiBvZiBIYWlrdSAzIGluIEFwcmlsIGZvcmNlcyBtaWdyYXRpb246IGJ1ZGdldCB0aW1lIGZvciBpdCBub3cuIiwidGFncyI6WyJtb2RlbHMiLCJjb3N0LWVmZmljaWVuY3kiLCJyZWFsLXRpbWUiXSwic2lnbmFsIjpudWxsLCJpc1NpZ25hbCI6ZmFsc2V9LHsiYnJhbmQiOiJjbGF1ZGUiLCJtb250aCI6Im1hciIsImRhdGUiOiJNYXIgfjI1IiwiZGF5IjoyNSwidGl0bGUiOiJNZW1vcnkgZm9yIEFsbCBVc2VycyAoaW5jbC4gRnJlZSkgKyBDaGF0IFNlYXJjaCIsImRlc2MiOiJNZW1vcnkgZnJvbSBjaGF0IGhpc3Rvcnkgbm93IGF2YWlsYWJsZSB0byBhbGwgQ2xhdWRlIHVzZXJzIGluY2x1ZGluZyBmcmVlIHRpZXIuIENyb3NzLXNlc3Npb24gY29udGV4dCwgaW1wb3J0L2V4cG9ydCBtZW1vcnksIHNlYXJjaCBwYXN0IGNvbnZlcnNhdGlvbnMuIENsYXVkZSBmb3IgRXhjZWwgYW5kIFBvd2VyUG9pbnQgYWRkLWlucyBub3cgc2hhcmUgZnVsbCBjb252ZXJzYXRpb24gY29udGV4dC4iLCJwbUluc2lnaHQiOiJHaXZpbmcgbWVtb3J5IHRvIGZyZWUgdXNlcnMgaXMgYW4gYWN0aXZhdGlvbiBhbmQgcmV0ZW50aW9uIHBsYXkgXHUyMDE0IGl0IGluY3JlYXNlcyB0aGUgc3dpdGNoaW5nIGNvc3QgZm9yIGV2ZXJ5IHVzZXIsIG5vdCBqdXN0IHBhaWQgb25lcy4gVGhlIGltcG9ydC9leHBvcnQgZmVhdHVyZSBpcyBxdWlldGx5IHBvd2VyZnVsOiB1c2VycyBjYW4gbm93IG93biBhbmQgcG9ydCB0aGVpciBBSSBjb250ZXh0LiBUaGF0J3MgYSB0cnVzdCBtb3ZlLiIsInRhZ3MiOlsiY29uc3VtZXIiLCJyZXRlbnRpb24iLCJwZXJzb25hbGl6YXRpb24iXSwic2lnbmFsIjpudWxsLCJpc1NpZ25hbCI6ZmFsc2V9LHsiYnJhbmQiOiJjbGF1ZGUiLCJtb250aCI6Im1hciIsImRhdGUiOiJNYXIgMjUiLCJkYXkiOjI1LCJ0aXRsZSI6IkludGVyYWN0aXZlIEFwcHMgaW4gQ2xhdWRlIGlPUyAmIEFuZHJvaWQiLCJkZXNjIjoiVGhlIENsYXVkZSBtb2JpbGUgYXBwIGNhbiBub3cgY29ubmVjdCB0byBmdWxseSBpbnRlcmFjdGl2ZSBhcHBzIFx1MjAxNCBwdWxsIHVwIGxpdmUgY2hhcnRzLCBza2V0Y2ggZGlhZ3JhbXMsIGFuZCBidWlsZCBzaGFyZWFibGUgYXNzZXRzIHJlbmRlcmVkIHZpc3VhbGx5IGluc2lkZSB0aGUgY29udmVyc2F0aW9uLiBBdmFpbGFibGUgb24gaU9TIGFuZCBBbmRyb2lkLiIsInBtSW5zaWdodCI6Ik1vYmlsZS1uYXRpdmUgaW50ZXJhY3RpdmUgYXJ0aWZhY3RzIGNoYW5nZSB3aG8gdXNlcyBDbGF1ZGUgYXMgYSB3b3JrIHRvb2wgXHUyMDE0IG5vdCBqdXN0IGRldmVsb3BlcnMgYW5kIGFuYWx5c3RzLCBidXQgYW55b25lIHdpdGggYSBwaG9uZS4gVGhlIFwic2hhcmVhYmxlIGFzc2V0c1wiIGFuZ2xlIGlzIHRoZSBzbGVlcGVyIGhlcmU6IGl0J3MgYSBjb2xsYWJvcmF0aW9uIHN1cmZhY2UsIG5vdCBqdXN0IGEgY2hhdC4iLCJ0YWdzIjpbImNvbnN1bWVyIiwibW9iaWxlIiwiVVgtaW5ub3ZhdGlvbiJdLCJzaWduYWwiOm51bGwsImlzU2lnbmFsIjpmYWxzZX0seyJicmFuZCI6Im9wZW5haSIsIm1vbnRoIjoibWFyIiwiZGF0ZSI6Ik1hciAyNCIsImRheSI6MjQsInRpdGxlIjoiR1BULTUuNCBNaW5pICsgTmFubyIsImRlc2MiOiJTbWFsbGVyLCBlZmZpY2llbnQgdmFyaWFudHMgb2YgR1BULTUuNC4gTWluaSBhdmFpbGFibGUgdG8gRnJlZS9HbyB1c2VycyB2aWEgVGhpbmtpbmcgZmVhdHVyZTsgdXNlZCBhcyBhIHJhdGUtbGltaXQgZmFsbGJhY2sgZm9yIHBhaWQgdXNlcnMuIE5hbm8gdGFyZ2V0ZWQgYXQgY29zdC1zZW5zaXRpdmUsIGhpZ2gtdm9sdW1lIGRlcGxveW1lbnRzLiIsInBtSW5zaWdodCI6IlRoZSBcImZyb250aWVyIGNhcGFiaWxpdGllcyBhdCBjb21tb2RpdHkgcHJpY2luZ1wiIHJhY2UgaXMgYWNjZWxlcmF0aW5nLiBNaW5pL05hbm8gZWNvbm9taWNzIG1hdHRlciBmb3IgYW55IFBNIHJ1bm5pbmcgQjJDIGZlYXR1cmVzIGF0IHNjYWxlIFx1MjAxNCB0aGUgY29zdC1wZXItaW50ZXJhY3Rpb24gbW9kZWwgY2hhbmdlcyB3aGVuIGZyb250aWVyLXF1YWxpdHkgY29zdHMgbmVhci1ub3RoaW5nLiIsInRhZ3MiOlsibW9kZWxzIiwiY29uc3VtZXIiLCJjb3N0LWVmZmljaWVuY3kiXSwic2lnbmFsIjpudWxsLCJpc1NpZ25hbCI6ZmFsc2V9LHsiYnJhbmQiOiJvcGVuYWkiLCJtb250aCI6Im1hciIsImRhdGUiOiJNYXIgMjRcdTIwMTMyOCIsImRheSI6MjQsInRpdGxlIjoiQ2hhdEdQVCBUZWVuIFNhZmV0eSBQb2xpY2llcyArIFVzZSBDYXNlIEdhbGxlcnkiLCJkZXNjIjoiVGVlbiBTYWZldHkgUG9saWNpZXMgKE1hciAyNCkgdGlnaHRlbiBndWFyZHJhaWxzIGZvciBtaW5vcnMuIFVzZSBDYXNlcyBHYWxsZXJ5IGFuZCBncHQtcmVhbHRpbWUtMS41IG1vZGVsIChNYXIgMjcpIGdpdmUgZGV2ZWxvcGVycyBhIGN1cmF0ZWQgbGlicmFyeSBvZiBwcm9kdWN0aW9uIHBhdHRlcm5zLiIsInBtSW5zaWdodCI6IlNhZmV0eSBwb2xpY3kgdXBkYXRlcyBhcmUgcGxhdGZvcm0gbW92ZXMuIFRlZW4gc2FmZXR5ID0gcmVndWxhdG9yeSBhbnRpY2lwYXRpb24gYWhlYWQgb2YgbGlrZWx5IEVVL1VTIGFnZS12ZXJpZmljYXRpb24gbGF3cy4gVXNlIENhc2VzIEdhbGxlcnkgaXMgYSBkZXZlbG9wZXIgYWNxdWlzaXRpb24gcGxheSBcdTIwMTQgcmVkdWNlIG9uYm9hcmRpbmcgZnJpY3Rpb24sIGluY3JlYXNlIEFQSSBhZG9wdGlvbi4iLCJ0YWdzIjpbInNhZmV0eSIsImNvbnN1bWVyIiwiZGV2ZWxvcGVyLXRvb2xzIiwicG9saWN5Il0sInNpZ25hbCI6bnVsbCwiaXNTaWduYWwiOmZhbHNlfSx7ImJyYW5kIjoiY2xhdWRlIiwibW9udGgiOiJtYXIiLCJkYXRlIjoiTWFyIDIzIiwiZGF5IjoyMywidGl0bGUiOiJDb21wdXRlciBVc2UgXHUyMDE0IE1hYyBSZXNlYXJjaCBQcmV2aWV3IChQcm8gJmFtcDsgTWF4KSIsImRlc2MiOiJDbGF1ZGUgY2FuIG5vdyBkaXJlY3RseSBjb250cm9sIGEgTWFjOiBvcGVuIGFwcHMsIGNsaWNrIGJ1dHRvbnMsIHR5cGUsIGFuZCBuYXZpZ2F0ZSBzY3JlZW5zLiBBdmFpbGFibGUgYXMgcmVzZWFyY2ggcHJldmlldyB0byBQcm8gYW5kIE1heCB1c2Vycy4gRmFsbHMgYmFjayB0byBzY3JlZW4gY29udHJvbCB3aGVuIG5vIGRpcmVjdCBpbnRlZ3JhdGlvbiBleGlzdHMuIFdvcmtzIHdpdGggQ293b3JrIGZvciByZW1vdGUgYXV0b21hdGlvbi4iLCJwbUluc2lnaHQiOiJUaGlzIGlzIHRoZSBtb21lbnQgY29tcHV0ZXIgdXNlIGJlY29tZXMgYWNjZXNzaWJsZSB0byByZWFsIHVzZXJzIFx1MjAxNCBub3QganVzdCBBUEkgZGV2ZWxvcGVycy4gXCJMZXQgQ2xhdWRlIHVzZSB5b3VyIGNvbXB1dGVyIG9uIHlvdXIgYmVoYWxmIHdoaWxlIHlvdSdyZSBhd2F5XCIgaXMgdGhlIGtpbGxlciB1c2UgY2FzZSBmb3IgYXN5bmMgcG93ZXIgdXNlcnMuIEh1Z2UgaW1wbGljYXRpb25zIGZvciBlbnRlcnByaXNlIHdvcmtmbG93cy4iLCJ0YWdzIjpbImNvbXB1dGVyLXVzZSIsImF1dG9tYXRpb24iLCJyZXNlYXJjaC1wcmV2aWV3Il0sInNpZ25hbCI6bnVsbCwiaXNTaWduYWwiOmZhbHNlfSx7ImJyYW5kIjoiY2xhdWRlIiwibW9udGgiOiJtYXIiLCJkYXRlIjoiTWFyIH4xOCIsImRheSI6MTgsInRpdGxlIjoiUGx1Z2luIE1hcmtldHBsYWNlICsgQWRtaW4gQ29udHJvbHMgKFRlYW0vRW50ZXJwcmlzZSkiLCJkZXNjIjoiTmV3IHBsdWdpbiBtYXJrZXRwbGFjZSBsYXVuY2hlZCB3aXRoIGFkbWluIGNvbnRyb2xzIGZvciBUZWFtIGFuZCBFbnRlcnByaXNlLiBDb3dvcmsgZ2FpbmVkIGRvbWFpbi1zcGVjaWZpYyBwbHVnaW5zOiBsZWdhbCBjb250cmFjdCByZXZpZXcsIGZpbmFuY2lhbCBhbmFseXNpcywgSFIsIGVuZ2luZWVyaW5nIHdvcmtmbG93cy4gQ29kZXggQ0xJIGFkZGVkIFBvd2VyU2hlbGwsIE1DUCBkZWR1cGxpY2F0aW9uLCB0cmFuc2NyaXB0IHNlYXJjaC4iLCJwbUluc2lnaHQiOiJUaGUgcGx1Z2luIG1hcmtldHBsYWNlIGlzIGEgcGxhdGZvcm0gbW92ZSBcdTIwMTQgQW50aHJvcGljIGlzIGJ1aWxkaW5nIGFuIGVjb3N5c3RlbSwgbm90IGp1c3QgYSBwcm9kdWN0LiBGb3IgUE1zLCB0aGlzIGlzIHRoZSBiZXQgb24gXCJDbGF1ZGUgYXMgcGxhdGZvcm1cIiB2cyBcIkNsYXVkZSBhcyBmZWF0dXJlLlwiIE1DUCBhdCA5N00gaW5zdGFsbHMgKDQsNzUwJSBncm93dGggc2luY2UgTm92IDIwMjUpIGlzIHRoZSBkaXN0cmlidXRpb24gcHJvb2YgcG9pbnQuIiwidGFncyI6WyJwbGF0Zm9ybSIsImVudGVycHJpc2UiLCJlY29zeXN0ZW0iLCJNQ1AiXSwic2lnbmFsIjpudWxsLCJpc1NpZ25hbCI6ZmFsc2V9LHsiYnJhbmQiOiJvcGVuYWkiLCJtb250aCI6Im1hciIsImRhdGUiOiJNYXIgMTdcdTIwMTMyMSIsImRheSI6MTcsInRpdGxlIjoiU3ViYWdlbnRzIGluIENvZGV4ICZhbXA7IEZhc3RlciBBZ2VudCBXb3JrZmxvd3MiLCJkZXNjIjoiTXVsdGktYWdlbnQgYXJjaGl0ZWN0dXJlIGluIENvZGV4OiBzdWItYWdlbnRzIHdpdGggcGF0aC1iYXNlZCBhZGRyZXNzZXMsIHN0cnVjdHVyZWQgaW50ZXItYWdlbnQgbWVzc2FnaW5nLCBwYXJhbGxlbCBhZ2VudCBsaXN0aW5nLiBDb2RleCBmb3IgU3R1ZGVudHMgbGF1bmNoZWQgTWFyIDIwLiBGYXN0ZXIgQWdlbnQgV29ya2Zsb3dzIE1h",
+    "ciAyMS4iLCJwbUluc2lnaHQiOiJTdWJhZ2VudHMgPSBwYXJhbGxlbCB0YXNrIGV4ZWN1dGlvbi4gVGhpcyBpcyB3aGVyZSBhZ2VudC1uYXRpdmUgUE0gdGhpbmtpbmcgYmVjb21lcyBtYW5kYXRvcnkgXHUyMDE0IHlvdSdyZSBubyBsb25nZXIgbWFuYWdpbmcgYSBzaW5nbGUgQUkgZG9pbmcgb25lIHRoaW5nLCB5b3UncmUgb3JjaGVzdHJhdGluZyBhIHRlYW0uIFJvYWRtYXAsIHNwcmludCBwbGFubmluZywgYW5kIHRpY2tldCB0cmlhZ2UgYXJlIGFsbCBmYWlyIGdhbWUuIiwidGFncyI6WyJhZ2VudHMiLCJtdWx0aS1hZ2VudCIsImRldmVsb3Blci10b29scyJdLCJzaWduYWwiOm51bGwsImlzU2lnbmFsIjpmYWxzZX0seyJicmFuZCI6ImNsYXVkZSIsIm1vbnRoIjoibWFyIiwiZGF0ZSI6Ik1hciAxNyIsImRheSI6MTcsInRpdGxlIjoiUGVyc2lzdGVudCBBZ2VudCBUaHJlYWQgXHUyMDE0IENvbnRyb2wgQ293b3JrIGZyb20gUGhvbmUiLCJkZXNjIjoiUHJvIGFuZCBNYXggdXNlcnMgY2FuIG5vdyBtYW5hZ2UgQ293b3JrIHRhc2tzIHZpYSBhIHBlcnNpc3RlbnQgYWdlbnQgdGhyZWFkIGluIENsYXVkZSBEZXNrdG9wIG9yIG1vYmlsZSAoaU9TL0FuZHJvaWQpLiBBc3NpZ24gdGFza3MgdG8gQ2xhdWRlIGZyb20gYW55d2hlcmUgXHUyMDE0IGl0IGtlZXBzIHdvcmtpbmcgb24geW91ciBtYWNoaW5lIHdoaWxlIHlvdSdyZSBhd2F5LiBSZXNlYXJjaCBwcmV2aWV3IHJvbGxpbmcgb3V0IHRvIE1heCBmaXJzdCwgdGhlbiBQcm8uIiwicG1JbnNpZ2h0IjoiVGhpcyBpcyB0aGUgXCJyZW1vdGUgQ0VPXCIgcGF0dGVybiBcdTIwMTQgZGVsZWdhdGUgZnJvbSB5b3VyIHBob25lLCBjaGVjayBiYWNrIG9uIHJlc3VsdHMuIEZvciBlbnRlcnByaXNlIFBNcywgdGhlIGltcGxpY2F0aW9ucyBmb3IgYXN5bmMgd29ya2Zsb3dzIGFuZCBhcHByb3ZhbCBnYXRlcyBhcmUgc2lnbmlmaWNhbnQuIFRoaXMgYWxzbyBzdHJlc3MtdGVzdHMgQW50aHJvcGljJ3MgaW5mcmFzdHJ1Y3R1cmUgYXQgYSBuZXcgbGV2ZWwuIiwidGFncyI6WyJhZ2VudHMiLCJhdXRvbWF0aW9uIiwibW9iaWxlIiwicmVzZWFyY2gtcHJldmlldyJdLCJzaWduYWwiOm51bGwsImlzU2lnbmFsIjpmYWxzZX0seyJicmFuZCI6Im9wZW5haSIsIm1vbnRoIjoibWFyIiwiZGF0ZSI6Ik1hciAxNiIsImRheSI6MTYsInRpdGxlIjoiSW50ZXJhY3RpdmUgTWF0aCAmYW1wOyBTY2llbmNlIExlYXJuaW5nIGluIENoYXRHUFQiLCJkZXNjIjoiNzArIGludGVyYWN0aXZlIHZpc3VhbCBtb2R1bGVzIGZvciBtYXRoIGFuZCBzY2llbmNlIHRvcGljcy4gQWRqdXN0IHZhcmlhYmxlcywgbWFuaXB1bGF0ZSBlcXVhdGlvbnMsIHNlZSByZWFsLXRpbWUgcmVzdWx0cy4gQnVpbGRzIG9uIHN0dWR5IG1vZGUgYW5kIHF1aXp6ZXMuIFBhcnQgb2YgQ2hhdEdQVCdzIHB1c2ggaW50byBlZHVjYXRpb24uIiwicG1JbnNpZ2h0IjoiQ29uc3VtZXIgZWR1Y2F0aW9uIGlzIGEgbWFzc2l2ZSBncmVlbmZpZWxkLiBLaGFuIEFjYWRlbXksIER1b2xpbmdvIFx1MjAxNCB3YXRjaCB0aGlzIHNwYWNlLiBUaGUgaW50ZXJhY3RpdmUgbW9kdWxlIHBhdHRlcm4gKG5vdCBqdXN0IGNoYXQsIGJ1dCBkeW5hbWljIGNhbGN1bGF0aW9uKSBpcyBhIG5ldyBVWCBwYXJhZGlnbSB0aGF0IGNvbnN1bWVyIGVkdWNhdGlvbiBQTXMgc2hvdWxkIGJlIHByb3RvdHlwaW5nIG5vdy4iLCJ0YWdzIjpbImNvbnN1bWVyIiwiZWR1Y2F0aW9uIiwiVVgtaW5ub3ZhdGlvbiJdLCJzaWduYWwiOm51bGwsImlzU2lnbmFsIjpmYWxzZX0seyJicmFuZCI6ImNsYXVkZSIsIm1vbnRoIjoibWFyIiwiZGF0ZSI6Ik1hciB+MTUiLCJkYXkiOjE1LCJ0aXRsZSI6IkNsYXVkZSBDb2RlIFx1MjAxNCBXZWIgJmFtcDsgTW9iaWxlICsgUGFyYWxsZWwgV29ya2Zsb3dzIiwiZGVzYyI6IkNsYXVkZSBDb2RlIGhpdCB0aGUgQ2xhdWRlLmFpIHdlYiBhbmQgbW9iaWxlIGFwcHMuIERldmVsb3BlcnMgY2FuIG5vdyBraWNrIG9mZiBwYXJhbGxlbCBjb2Rpbmcgd29ya2Zsb3dzIGZyb20gYW55IGRldmljZSBvbiBBbnRocm9waWMtbWFuYWdlZCBpbnN0YW5jZXMuIEVudGVycHJpc2UgQW5hbHl0aWNzIGRhc2hib2FyZCBhZGRlZCB0byB0cmFjayBzcGVuZCBhbmQgY29kZSBhY2NlcHRhbmNlIHJhdGVzLiIsInBtSW5zaWdodCI6Ik1vYmlsZSBhY2Nlc3MgdG8gY29kaW5nIGFnZW50cyBjaGFuZ2VzIHdobyB1c2VzIHRoZW0uIFRoaXMgaXNuJ3QganVzdCBkZXZlbG9wZXJzIFx1MjAxNCBpdCdzIGFueW9uZSB3aG8gbmVlZHMgdG8gdHJpZ2dlciBhdXRvbWF0aW9uIGZyb20gdGhlaXIgcGhvbmUuIFRoZSBFbnRlcnByaXNlIEFuYWx5dGljcyBkYXNoYm9hcmQgaXMgdGhlIG1vbmV0aXphdGlvbiB1bmxvY2s6IHZpc2liaWxpdHkgaW50byBST0kgYWNjZWxlcmF0ZXMgYnVkZ2V0IGFwcHJvdmFsLiIsInRhZ3MiOlsiZGV2ZWxvcGVyLXRvb2xzIiwibW9iaWxlIiwiZW50ZXJwcmlzZSJdLCJzaWduYWwiOm51bGwsImlzU2lnbmFsIjpmYWxzZX0seyJicmFuZCI6Im9wZW5haSIsIm1vbnRoIjoibWFyIiwiZGF0ZSI6Ik1hciAxNCIsImRheSI6MTQsInRpdGxlIjoiQ29kZXggR29lcyBHbG9iYWwiLCJkZXNjIjoiQ29kZXggY29kaW5nIGFnZW50IG9wZW5lZCB0byBpbnRlcm5hdGlvbmFsIG1hcmtldHMuIEJyb2FkZXIgYXZhaWxhYmlsaXR5IHNpZ25hbHMgT3BlbkFJIGlzIGNvbmZpZGVudCBpbiB0aGUgcHJvZHVjdCdzIHN0YWJpbGl0eSBwb3N0LUdQVC01LjQgaW50ZWdyYXRpb24uIiwicG1JbnNpZ2h0IjoiR2xvYmFsIGV4cGFuc2lvbiBpcyBhIG1vbmV0aXphdGlvbiBtb3ZlLCBub3QgYW4gUiZEIG1vdmUuIENvZGV4IGdvaW5nIGdsb2JhbCA9IE9wZW5BSSBpcyBzaWduYWxpbmcgdGhpcyBpcyBhIHNlcmlvdXMgcmV2ZW51ZSBsaW5lLCBub3QgYSByZXNlYXJjaCBwcmV2aWV3LiIsInRhZ3MiOlsiZXhwYW5zaW9uIiwiZ28tdG8tbWFya2V0IiwiZGV2ZWxvcGVyLXRvb2xzIl0sInNpZ25hbCI6bnVsbCwiaXNTaWduYWwiOmZhbHNlfSx7ImJyYW5kIjoiY2xhdWRlIiwibW9udGgiOiJtYXIiLCJkYXRlIjoiTWFyIDEzIiwiZGF5IjoxMywidGl0bGUiOiJVc2FnZSBMaW1pdHMgRG91YmxlZCBcdTIwMTQgQWxsIFBsYW5zIiwiZGVzYyI6Ik9mZi1wZWFrIHVzYWdlIGxpbWl0cyBkb3VibGVkIGFjcm9zcyBGcmVlLCBQcm8sIE1heCwgYW5kIFRlYW0gcGxhbnMgZnJvbSBNYXJjaCAxMyB0aHJvdWdoIE1hcmNoIDI4LiBDbGF1ZGUgQ29kZSB1c2FnZSBncmV3IDMwMCUgc2luY2UgQ2xhdWRlIDQgbGF1bmNoOyBydW4tcmF0ZSByZXZlbnVlIHVwIDUuNXguIiwicG1JbnNpZ2h0IjoiRG91YmxpbmcgbGltaXRzIGlzIGEgcmV0ZW50aW9uIGFuZCBhY3RpdmF0aW9uIG1vdmUgXHUyMDE0IEFudGhyb3BpYyBpcyBpbnZlc3RpbmcgaW4gcmVkdWNpbmcgZnJpY3Rpb24gd2hlbiB1c2VycyBhcmUgbW9zdCBlbmdhZ2VkLiBUaGUgNS41eCByZXZlbnVlIGdyb3d0aCBpbiBDbGF1ZGUgQ29kZSBpcyB0aGUgc2lnbmFsIHRoYXQgZGV2ZWxvcGVyIHRvb2xpbmcgaXMgdGhlaXIgaGlnaGVzdC12ZWxvY2l0eSBidXNpbmVzcyBsaW5lLiIsInRhZ3MiOlsiZ3Jvd3RoIiwicHJpY2luZyIsInJldGVudGlvbiJdLCJzaWduYWwiOm51bGwsImlzU2lnbmFsIjpmYWxzZX0seyJicmFuZCI6ImNsYXVkZSIsIm1vbnRoIjoibWFyIiwiZGF0ZSI6Ik1hciAxMiIsImRheSI6MTIsInRpdGxlIjoiQ3VzdG9tIENoYXJ0cyAmIElubGluZSBWaXN1YWxpemF0aW9ucyIsImRlc2MiOiJDbGF1ZGUgY2FuIG5vdyBnZW5lcmF0ZSBjdXN0b20gY2hhcnRzLCBkaWFncmFtcywgYW5kIGRhdGEgdmlzdWFsaXphdGlvbnMgaW5saW5lIGluIHJlc3BvbnNlcyBcdTIwMTQgcmVuZGVyZWQgdmlzdWFsbHkgcmlnaHQgaW4gdGhlIGNvbnZlcnNhdGlvbiwgbm8gZXhwb3J0IG5lZWRlZC4gQXZhaWxhYmxlIGFjcm9zcyB3ZWIgYW5kIG1vYmlsZS4iLCJwbUluc2lnaHQiOiJUZXh0IFx1MjE5MiBjaGFydCBpbiBvbmUgc3RlcCByZW1vdmVzIHRoZSBiaWdnZXN0IGZyaWN0aW9uIGluIGRhdGEgc3Rvcnl0ZWxsaW5nLiBGb3IgUE1zLCB0aGlzIGNoYW5nZXMgd2hhdCBcInF1aWNrIGFuYWx5c2lzXCIgbWVhbnMgXHUyMDE0IHlvdSBjYW4gbm93IGFzayBDbGF1ZGUgdG8gdmlzdWFsaXplIGEgZGF0YXNldCBtaWQtY29udmVyc2F0aW9uIHdpdGhvdXQgbGVhdmluZyB0byBUYWJsZWF1IG9yIFNoZWV0cy4iLCJ0YWdzIjpbImNvbnN1bWVyIiwiVVgtaW5ub3ZhdGlvbiIsInByb2R1Y3Rpdml0eSJdLCJzaWduYWwiOm51bGwsImlzU2lnbmFsIjpmYWxzZX0seyJicmFuZCI6ImNsYXVkZSIsIm1vbnRoIjoibWFyIiwiZGF0ZSI6Ik1hciAxMSIsImRheSI6MTEsInRpdGxlIjoiQ2xhdWRlIGZvciBFeGNlbCArIFBvd2VyUG9pbnQgXHUyMDE0IFNoYXJlZCBDb250ZXh0IiwiZGVzYyI6IkV4Y2VsIGFuZCBQb3dlclBvaW50IGFkZC1pbnMgbm93IHNoYXJlIGZ1bGwgY29udmVyc2F0aW9uIGNvbnRleHQgXHUyMDE0IGV2ZXJ5IGFjdGlvbiBDbGF1ZGUgdGFrZXMgaW4gb25lIGFwcCBpcyBpbmZvcm1lZCBieSBldmVyeXRoaW5nIGluIHRoZSBvdGhlci4gQWRkZWQgc3VwcG9ydCBmb3Igc2tpbGxzIGFuZCBMTE0gZ2F0ZXdheSBjb25uZWN0aW9ucyB2aWEgQmVkcm9jaywgVmVydGV4IEFJLCBhbmQgTWljcm9zb2Z0IEZvdW5kcnkuIiwicG1JbnNpZ2h0IjoiU2hhcmVkIGNvbnRleHQgYmV0d2VlbiBhcHBzIGlzIHRoZSByZWFsIHVubG9jayBoZXJlIFx1MjAxNCBub3QganVzdCBBSSBpbiBhIHNwcmVhZHNoZWV0LCBidXQgQUkgdGhhdCBrbm93cyB3aGF0J3MgaW4geW91ciBkZWNrIHdoZW4gZWRpdGluZyB5b3VyIG1vZGVsLiBUaGlzIGlzIHRoZSBcImRhdGEtdG8tbmFycmF0aXZlXCIgcGlwZWxpbmUgdGhhdCBraWxscyBtYW51YWwgY29weS1wYXN0ZSB3b3JrZmxvd3MgYmV0d2VlbiB0b29scy4iLCJ0YWdzIjpbInByb2R1Y3Rpdml0eSIsImVudGVycHJpc2UiLCJpbnRlZ3JhdGlvbnMiXSwic2lnbmFsIjpudWxsLCJpc1NpZ25hbCI6ZmFsc2V9LHsiYnJhbmQiOiJvcGVuYWkiLCJtb250aCI6Im1hciIsImRhdGUiOiJNYXIgMTBcdTIwMTMxNCIsImRheSI6MTAsInRpdGxlIjoiQ29kZXggRXhwYW5zaW9uIFdlZWs6IFRoZW1lcywgQXBwIFRoZW1lcywgQ29UIENvbnRyb2xsYWJpbGl0eSIsImRlc2MiOiJDbHVzdGVyIG9mIENvZGV4IHVwZGF0ZXM6IEFwcCBUaGVtZXMgZm9yIFVJIGN1c3RvbWl6YXRpb24sIENoYWluLW9mLVRob3VnaHQgY29udHJvbGxhYmlsaXR5ICh1c2VycyBjYW4gaW5zcGVjdC9ndWlkZSByZWFzb25pbmcgc3RlcHMpLCBBdXRvbWF0aW9ucyBHQSwgR1BULTUuNCAjMSBvbiBDdXJzb3IgbGVhZGVyYm9hcmQuIEdQVC01LjQgSW1hZ2UgRW5jb2RpbmcgYWRkZWQgTWFyIDEzLiIsInBtSW5zaWdodCI6IkNvVCBjb250cm9sbGFiaWxpdHkgaXMgdGhlIHNsZWVwZXIgZmVhdHVyZSBoZXJlLiBMZXR0aW5nIHVzZXJzIGluc3BlY3QgcmVhc29uaW5nIHN0ZXBzIGlzIGEgdHJhbnNwYXJlbmN5IHBsYXkgXHUyMDE0IGFuZCBsaWtlbHkgYSB0cnVzdCBkcml2ZXIgZm9yIGVudGVycHJpc2UgY3VzdG9tZXJzIGRvaW5nIGNvbXBsaWFuY2Utc2Vuc2l0aXZlIHdvcmsuIiwidGFncyI6WyJkZXZlbG9wZXItdG9vbHMiLCJ0cmFuc3BhcmVuY3kiLCJyZWFzb25pbmciXSwic2lnbmFsIjpudWxsLCJpc1NpZ25hbCI6ZmFsc2V9LHsiYnJhbmQiOiJjbGF1ZGUiLCJtb250aCI6Im1hciIsImRhdGUiOiJNYXIgOSIsImRheSI6OSwidGl0bGUiOiJNaWNyb3NvZnQgMzY1IENvcGlsb3QgXHUyMDE0IENsYXVkZSBTb25uZXQgSW50ZWdyYXRpb24iLCJkZXNjIjoiTWljcm9zb2Z0IG1hZGUgQ2xhdWRlIFNvbm5ldCA0LjYgYXZhaWxhYmxlIGluc2lkZSBNaWNyb3NvZnQgMzY1IENvcGlsb3QgZm9yIGl0cyB1c2VycyBcdTIwMTQgYSBtYWpvciBlbnRlcnByaXNlIGRpc3RyaWJ1dGlvbiB3aW4uIENsYXVkZSBub3cgZW1iZWRkZWQgaW4gV29yZCwgRXhjZWwsIFRlYW1zLCBhbmQgT3V0bG9vayB2aWEgQ29waWxvdC4iLCJwbUluc2lnaHQiOiJUaGlz",
+    "IGlzIHRoZSBiaWdnZXN0IGRpc3RyaWJ1dGlvbiBtb3ZlIG9mIHRoZSBxdWFydGVyLiBNaWNyb3NvZnQgMzY1IGhhcyA0MDBNKyBzZWF0cy4gQ2xhdWRlIGlzIG5vdyB0aGUgQUkgaW4gdGhlIHdvcmxkJ3MgbW9zdC11c2VkIHByb2R1Y3Rpdml0eSBzdWl0ZSBmb3IgbWlsbGlvbnMgb2YgZW50ZXJwcmlzZSB1c2VycyB3aG8gbmV2ZXIgaGVhcmQgb2YgQW50aHJvcGljLiBEaXN0cmlidXRpb24gJmd0OyBwcm9kdWN0LiIsInRhZ3MiOlsiZW50ZXJwcmlzZSIsInBhcnRuZXJzaGlwcyIsImRpc3RyaWJ1dGlvbiJdLCJzaWduYWwiOm51bGwsImlzU2lnbmFsIjpmYWxzZX0seyJicmFuZCI6Im9wZW5haSIsIm1vbnRoIjoibWFyIiwiZGF0ZSI6Ik1hciA2IiwiZGF5Ijo2LCJ0aXRsZSI6IkNvZGV4IFNlY3VyaXR5IFx1MjAxNCBSZXNlYXJjaCBQcmV2aWV3IiwiZGVzYyI6IlNlY3VyaXR5LWZvY3VzZWQgY29kaW5nIGFuYWx5c2lzIGxhdW5jaGVkIGFsb25nc2lkZSBHUFQtNS40LiBGb2N1c2VzIG9uIGRlZmVuc2l2ZSBjeWJlcnNlY3VyaXR5LiBOb3RhYmx5LCBPcGVuQUkgcHVibGlzaGVkIGEgYmxvZyBleHBsYWluaW5nIHdoeSBDb2RleCBTZWN1cml0eSBkb2Vzbid0IGluY2x1ZGUgYSBTQVNUIHJlcG9ydCBcdTIwMTQgcG9zaXRpb25pbmcgb24gdHJhbnNwYXJlbmN5LiIsInBtSW5zaWdodCI6Ik9wZW5BSSBhbmQgQW50aHJvcGljIGJvdGggc2hpcHBlZCBzZWN1cml0eSBzY2FubmluZyBwcm9kdWN0cyB3aXRoaW4gd2Vla3Mgb2YgZWFjaCBvdGhlciAoQ2xhdWRlIENvZGUgU2VjdXJpdHkgRmViIDIwLCBDb2RleCBTZWN1cml0eSBNYXIgNikuIFdoZW4gcml2YWxzIGNvbnZlcmdlIHRoaXMgZmFzdCwgdGhlIGNhdGVnb3J5IGlzIHJlYWwgXHUyMDE0IGJ1dCBkaWZmZXJlbnRpYXRpb24gd2lsbCBiZSBldmVyeXRoaW5nLiIsInRhZ3MiOlsic2VjdXJpdHkiLCJkZXZlbG9wZXItdG9vbHMiLCJyZXNlYXJjaC1wcmV2aWV3Il0sInNpZ25hbCI6bnVsbCwiaXNTaWduYWwiOmZhbHNlfSx7ImJyYW5kIjoib3BlbmFpIiwibW9udGgiOiJtYXIiLCJkYXRlIjoiTWFyIDUiLCJkYXkiOjUsInRpdGxlIjoiR1BULTUuNCBcdTIwMTQgRnJvbnRpZXIgTW9kZWwgZm9yIFByb2Zlc3Npb25hbCBXb3JrIiwiZGVzYyI6Ik1vc3QgY2FwYWJsZSBHUFQgcmVsZWFzZTogbWVyZ2VzIHJlYXNvbmluZyArIGNvZGluZyAoR1BULTUuMy1Db2RleCkgY2FwYWJpbGl0aWVzLiBGYXN0ZXIsIGNoZWFwZXIgdGhhbiA1LjIuIEV4Y2VscyBhdCBzcHJlYWRzaGVldHMsIHByZXNlbnRhdGlvbnMsIGRvY3VtZW50cy4gQXZhaWxhYmxlIGluIENoYXRHUFQgKGFzIFwiR1BULTUuNCBUaGlua2luZ1wiKSBhbmQgQVBJLiAvZmFzdCBtb2RlIGluIENvZGV4IGdpdmVzIDEuNXggdG9rZW4gdmVsb2NpdHkuIiwicG1JbnNpZ2h0IjoiVGhlIFwicHJvZmVzc2lvbmFsIHdvcmtcIiBwb3NpdGlvbmluZyBpcyBkZWxpYmVyYXRlIFx1MjAxNCB0aGlzIGlzbid0IGEgY2hhdGJvdCB1cGRhdGUsIGl0J3MgZ29pbmcgYWZ0ZXIgZW50ZXJwcmlzZSBzb2Z0d2FyZSBjYXRlZ29yaWVzLiBUaGUgR0RQdmFsIGJlbmNobWFyayAoNDQgb2NjdXBhdGlvbnMsIHJlYWwgd29yayBwcm9kdWN0cykgaXMgYSBzbWFydGVyIGV2YWwgZm9yIFBNcyB0aGFuIE1NTFUuIENvcHkgdGhpcyBmcmFtaW5nLiIsInRhZ3MiOlsiZmxhZ3NoaXAiLCJyZWFzb25pbmciLCJlbnRlcnByaXNlIiwicHJvZHVjdGl2aXR5Il0sInNpZ25hbCI6bnVsbCwiaXNTaWduYWwiOmZhbHNlfSx7ImJyYW5kIjoib3BlbmFpIiwibW9udGgiOiJtYXIiLCJkYXRlIjoiTWFyIDUiLCJkYXkiOjUsInRpdGxlIjoiQ2hhdEdQVCBmb3IgRXhjZWwgKyBGaW5hbmNpYWwgRGF0YSBJbnRlZ3JhdGlvbnMiLCJkZXNjIjoiTmF0aXZlIEV4Y2VsIGFkZC1pbiBicmluZ2luZyBHUFQtNS40IGludG8gc3ByZWFkc2hlZXRzLiBGaW5hbmNpYWwgZGF0YSBpbnRlZ3JhdGlvbnMgYWRkZWQuIERpcmVjdCBjb21wZXRpdG9yIHRvIENvcGlsb3QgaW4gTWljcm9zb2Z0J3Mgb3duIGVjb3N5c3RlbSBcdTIwMTQgYW5kIHRvIENsYXVkZSBmb3IgRXhjZWwuIiwicG1JbnNpZ2h0IjoiQm90aCBBbnRocm9waWMgYW5kIE9wZW5BSSBsYXVuY2hlZCBFeGNlbCBpbnRlZ3JhdGlvbnMgaW4gdGhlIHNhbWUgd2Vlay4gV2hlbiBib3RoIGZyb250aWVyIGxhYnMgYmV0IG9uIHRoZSBzYW1lIHN1cmZhY2Ugc2ltdWx0YW5lb3VzbHksIHRoYXQncyBhIGNhdGVnb3J5IHNpZ25hbCBcdTIwMTQgdGhlIHNwcmVhZHNoZWV0IGlzIGJlY29taW5nIHRoZSBwcmltYXJ5IGVudGVycHJpc2UgQUkgaW50ZXJmYWNlLiIsInRhZ3MiOlsicHJvZHVjdGl2aXR5IiwiZW50ZXJwcmlzZSIsImZpbmFuY2UiLCJpbnRlZ3JhdGlvbnMiXSwic2lnbmFsIjpudWxsLCJpc1NpZ25hbCI6ZmFsc2V9LHsiYnJhbmQiOiJvcGVuYWkiLCJtb250aCI6Im1hciIsImRhdGUiOiJNYXIgNSIsImRheSI6NSwidGl0bGUiOiJDb2RleCBmb3IgV2luZG93cyBcdTIwMTQgRmlyc3QtQ2xhc3MgU3VwcG9ydCIsImRlc2MiOiJDb2RleCBjb2RpbmcgYWdlbnQgbm93IHdpdGggZnVsbCBXaW5kb3dzIHN1cHBvcnQuIFBhcnQgb2YgdGhlIGJyb2FkZXIgQ29kZXggZXhwYW5zaW9uIGFsb25nc2lkZSBHUFQtNS40IGxhdW5jaCwgdGFyZ2V0aW5nIGVudGVycHJpc2UgV2luZG93cyBkZXYgZW52aXJvbm1lbnRzLiIsInBtSW5zaWdodCI6Ildpbm5pbmcgZW50ZXJwcmlzZSBkZXYgPSB3aW5uaW5nIFdpbmRvd3MuIFRoaXMgaXMgdGFibGUgc3Rha2VzIGZvciBzZXJpb3VzIEIyQiBBSSB0b29saW5nIFx1MjAxNCB0aGUgbWFya2V0IG9mIGRldmVsb3BlcnMgb24gV2luZG93cyBpcyBodWdlIGFuZCB1bmRlcnNlcnZlZCBieSBtb3N0IEFJIHRvb2xzLiIsInRhZ3MiOlsiZGV2ZWxvcGVyLXRvb2xzIiwiZW50ZXJwcmlzZSIsInBsYXRmb3JtIl0sInNpZ25hbCI6bnVsbCwiaXNTaWduYWwiOmZhbHNlfSx7ImJyYW5kIjoib3BlbmFpIiwibW9udGgiOiJtYXIiLCJkYXRlIjoiTWFyIDMiLCJkYXkiOjMsInRpdGxlIjoiTG9ja2Rvd24gTW9kZSAmYW1wOyBFbGV2YXRlZCBSaXNrIExhYmVscyIsImRlc2MiOiJTYWZldHktZmlyc3QgY29uc3VtZXIgZmVhdHVyZXMgXHUyMDE0IExvY2tkb3duIE1vZGUgcmVzdHJpY3RzIHNlbnNpdGl2ZSBpbmZvcm1hdGlvbiBzaGFyaW5nOyBFbGV2YXRlZCBSaXNrIGxhYmVscyB3YXJuIHVzZXJzIGJlZm9yZSByaXNreSBvdXRwdXRzLiBUYXJnZXRlZCBhdCBlbnRlcnByaXNlIGFuZCByZWd1bGF0ZWQgaW5kdXN0cmllcy4iLCJwbUluc2lnaHQiOiJTYWZldHkgVVggaXMgYmVjb21pbmcgYSBwcm9kdWN0IGRpZmZlcmVudGlhdG9yLCBub3QganVzdCBwb2xpY3kgY29tcGxpYW5jZS4gUE1zIGluIHJlZ3VsYXRlZCB2ZXJ0aWNhbHMgKGhlYWx0aCwgZmluYW5jZSwgbGVnYWwpIHNob3VsZCBzdHVkeSB0aGlzIHBhdHRlcm4gXHUyMDE0IGl0IHNpZ25hbHMgdGhhdCBndWFyZHJhaWwgdmlzaWJpbGl0eSBpcyBub3cgYSBmZWF0dXJlLCBub3QgYSB3YXJuaW5nIGxhYmVsLiIsInRhZ3MiOlsic2FmZXR5IiwiZW50ZXJwcmlzZSIsInRydXN0Il0sInNpZ25hbCI6bnVsbCwiaXNTaWduYWwiOmZhbHNlfSx7ImJyYW5kIjoiY2xhdWRlIiwibW9udGgiOiJhcHIiLCJkYXRlIjoiRWFybHkgQXByIiwiZGF5IjowLCJ0aXRsZSI6IkNsYXVkZSBNeXRob3MgXHUyMDE0IEdlbmVyYWwgQXZhaWxhYmlsaXR5IiwiZGVzYyI6IlRyYWluaW5nIGNvbXBsZXRlLCBwaWxvdCB1bmRlcndheSB3aXRoIHNlY3VyaXR5LWZvY3VzZWQgZW50ZXJwcmlzZSBjdXN0b21lcnMuIEEgbmV3IGZvdXJ0aCB0aWVyIGFib3ZlIE9wdXMgXHUyMDE0IFwiQ2FweWJhcmFcIiBlZGl0aW9uIGRlc2NyaWJlZCBhcyBkcmFtYXRpY2FsbHkgYmV0dGVyIGF0IGNvZGluZyBhbmQgdnVsbmVyYWJpbGl0eSBkZXRlY3Rpb24uIEdyYWR1YWwgcm9sbG91dCBleHBlY3RlZCwgcHJlbWl1bSBwcmljaW5nLiBGb3JtYWwgbGF1bmNoIFRCRC4iLCJwbUluc2lnaHQiOiJUaGUgZm91cnRoIHRpZXIgY2hhbmdlcyBBbnRocm9waWMncyBlbnRpcmUgcHJpY2luZyBhcmNoaXRlY3R1cmUuIFdhdGNoIGZvciBhIG5ldyBlbnRlcnByaXNlIHNhbGVzIG1vdGlvbiBcdTIwMTQgTXl0aG9zIHdvbid0IGJlIHNlbGYtc2VydmUuIFRoaXMgaXMgdGhlIG1vZGVsIHRoYXQgbWFrZXMgQ2xhdWRlIGEgc2VyaW91cyBkZWZlbnNlIGFuZCBzZWN1cml0eSB2ZW5kb3IsIG5vdCBqdXN0IGEgcHJvZHVjdGl2aXR5IHRvb2wuIiwidGFncyI6WyJtb2RlbHMiLCJmcm9udGllciIsInNlY3VyaXR5IiwiZW50ZXJwcmlzZSJdLCJzaWduYWwiOiJzaWduYWwiLCJpc1NpZ25hbCI6dHJ1ZX0seyJicmFuZCI6ImNsYXVkZSIsIm1vbnRoIjoiYXByIiwiZGF0ZSI6IkFwciAxOSIsImRheSI6MTksInRpdGxlIjoiQ2xhdWRlIEhhaWt1IDMgXHUyMDE0IERlcHJlY2F0aW9uIERlYWRsaW5lIiwiZGVzYyI6Ik9mZmljaWFsIHJldGlyZW1lbnQgb2YgY2xhdWRlLTMtaGFpa3UtMjAyNDAzMDcgb24gQXByaWwgMTksIDIwMjYuIE1pZ3JhdGlvbiB0byBDbGF1ZGUgSGFpa3UgNC41IHJlcXVpcmVkLiBIYWlrdSA0LjUgb2ZmZXJzIG5lYXItZnJvbnRpZXIgcGVyZm9ybWFuY2UgYXQgc2ltaWxhciBjb3N0IHdpdGggc3RydWN0dXJlZCBvdXRwdXRzIEdBLiIsInBtSW5zaWdodCI6IklmIHlvdXIgdGVhbSBoYXMgYW55IHByb2R1Y3QgYnVpbHQgb24gSGFpa3UgMywgQXByaWwgMTkgaXMgYSBoYXJkIGRlYWRsaW5lLiBIYWlrdSA0LjUgbWlncmF0aW9uIHNob3VsZCBiZSBpbiB5b3VyIHNwcmludCBwbGFuIG5vdyBcdTIwMTQgZG9uJ3QgbGV0IHRoaXMgYmVjb21lIGFuIGluY2lkZW50LiIsInRhZ3MiOlsibW9kZWxzIiwiZGVwcmVjYXRpb24iLCJkZXZlbG9wZXItdG9vbHMiXSwic2lnbmFsIjoiY29uZmlybWVkIiwiaXNTaWduYWwiOnRydWV9LHsiYnJhbmQiOiJjbGF1ZGUiLCJtb250aCI6ImFwciIsImRhdGUiOiJNaWQgQXByIiwiZGF5IjowLCJ0aXRsZSI6IkNvbXB1dGVyIFVzZSBcdTIwMTQgR0EgRXhwYW5zaW9uIEJleW9uZCBNYWMiLCJkZXNjIjoiQ3VycmVudGx5IHJlc2VhcmNoIHByZXZpZXcgb24gbWFjT1Mgb25seSBmb3IgUHJvL01heC4gV2luZG93cyBhbmQgYnJvYWRlciBwbGF0Zm9ybSBzdXBwb3J0IGV4cGVjdGVkIGluIEFwcmlsIGJhc2VkIG9uIHRoZSBWZXJjZXB0IGFjcXVpc2l0aW9uIHRyYWplY3RvcnkgYW5kIE9TV29ybGQgYmVuY2htYXJrIHByb2dyZXNzICg3Mi41JSBhbmQgY2xpbWJpbmcpLiIsInBtSW5zaWdodCI6IldoZW4gY29tcHV0ZXIgdXNlIGV4aXRzIHJlc2VhcmNoIHByZXZpZXcgaXQgYmVjb21lcyBhIGRlZmF1bHQgY2FwYWJpbGl0eSB0byBkZXNpZ24gYXJvdW5kIFx1MjAxNCBub3QgYW4gZXhwZXJpbWVudC4gU3RhcnQgc2NvcGluZyBhc3luYyB3b3JrZmxvdyB1c2UgY2FzZXMgbm93IHNvIHlvdSdyZSBub3Qgc2NyYW1ibGluZyB3aGVuIEdBIGRyb3BzLiIsInRhZ3MiOlsiY29tcHV0ZXItdXNlIiwiYXV0b21hdGlvbiIsImFnZW50cyJdLCJzaWduYWwiOiJzaWduYWwiLCJpc1NpZ25hbCI6dHJ1ZX0seyJicmFuZCI6Im9wZW5haSIsIm1vbnRoIjoiYXByIiwiZGF0ZSI6IkFwciBUQkQiLCJkYXkiOjAsInRpdGxlIjoiT3BlbkFJIFwiU3B1ZFwiIFx1MjAxNCBOZXh0IEZyb250aWVyIE1vZGVsIiwiZGVzYyI6IlByZXRyYWluaW5nIGNvbXBsZXRlLiBTYW0gQWx0bWFuIGhhcyBkZXNjcmliZWQgaXQgaW50ZXJuYWxseSBhcyBhYmxlIHRvIFwicmVhbGx5IGFjY2VsZXJhdGUgdGhlIGVjb25vbXlcIiBcdTIwMTQgYSBjYXBhYmlsaXR5IGp1bXAgYWJvdmUgR1BULTUuNC4gQm90aCBPcGVuQUkgYW5kIEFudGhyb3BpYyBhcmUgcmVwb3J0ZWRseSB0aW1pbmcgbWFqb3IgcmVsZWFzZXMgYXJvdW5kIHBsYW5uZWQgSVBPcyBpbiBIMiAyMDI2LiIsInBtSW5zaWdodCI6IklmIFNwdWQgc2hpcHMgaW4gQXByaWwgaXQgcmVzZXRzIHRoZSBiZW5jaG1hcmsgbGVhZGVyYm9hcmQgYWdhaW4uIFBNcyBidWlsZGluZyBvbiBHUFQtNS40IHNob3VsZCBhc3N1bWUgYSBuZXcg",
+    "ZGVmYXVsdCBtb2RlbCBpcyA0XHUyMDEzNiB3ZWVrcyBhd2F5IGFuZCBkZXNpZ24gdXBncmFkZSBwYXRocyBpbnRvIHRoZWlyIGFyY2hpdGVjdHVyZSBub3cuIiwidGFncyI6WyJtb2RlbHMiLCJmcm9udGllciIsInJvYWRtYXAiXSwic2lnbmFsIjoic2lnbmFsIiwiaXNTaWduYWwiOnRydWV9LHsiYnJhbmQiOiJvcGVuYWkiLCJtb250aCI6ImFwciIsImRhdGUiOiJBcHIgVEJEIiwiZGF5IjowLCJ0aXRsZSI6IkNvZGV4IFBsdWdpbnMgXHUyMDE0IENvbnN1bWVyIEdBIiwiZGVzYyI6IkNvZGV4IHBsdWdpbiBtYXJrZXRwbGFjZSBsYXVuY2hlZCB0byBFbnRlcnByaXNlL0J1c2luZXNzIGluIGxhdGUgTWFyY2guIENvbnN1bWVyIHJvbGxvdXQgdG8gUGx1cyBhbmQgUHJvIGV4cGVjdGVkIGluIEFwcmlsLiBGaXJzdC1jbGFzcyBwbHVnaW4gd29ya2Zsb3dzLCBNQ1Agc2VydmVyIGNvbmZpZ3MsIGFuZCByZXVzYWJsZSBza2lsbCBidW5kbGVzIHdpbGwgYmUgYnJvYWRseSBhdmFpbGFibGUuIiwicG1JbnNpZ2h0IjoiV2hlbiBDb2RleCBwbHVnaW5zIGdvIGNvbnN1bWVyIEdBLCB0aGUgZGV2ZWxvcGVyIHdvcmtmbG93IGVjb3N5c3RlbSBsb2NrcyBpbiBmYXN0LiBEaXN0cmlidXRpb24gd2lucyBnbyB0byB3aG9ldmVyIGhhcyBwbHVnaW5zIGluc3RhbGxlZCBmaXJzdC4gSWYgeW91J3JlIGJ1aWxkaW5nIGRldiB0b29scywgQXByaWwgaXMgeW91ciB3aW5kb3cgdG8gZ2V0IGludG8gdGhlIG1hcmtldHBsYWNlLiIsInRhZ3MiOlsicGxhdGZvcm0iLCJlY29zeXN0ZW0iLCJkaXN0cmlidXRpb24iLCJkZXZlbG9wZXItdG9vbHMiXSwic2lnbmFsIjoic2lnbmFsIiwiaXNTaWduYWwiOnRydWV9XSwidHdlZXRzIjpbeyJicmFuZCI6ImNsYXVkZSIsInVybCI6Imh0dHBzOi8veC5jb20vYmNoZXJueS9zdGF0dXMvMjAzMTA4OTQxMTgyMDIyODY0NSIsIm5hbWUiOiJCb3JpcyBDaGVybnkiLCJoYW5kbGUiOiJAYmNoZXJueSBcdTAwYjcgTWFyIDkiLCJ0ZXh0IjoiTmV3IGluIENsYXVkZSBDb2RlOiBDb2RlIFJldmlldy4gQSB0ZWFtIG9mIGFnZW50cyBydW5zIGEgZGVlcCByZXZpZXcgb24gZXZlcnkgUFIuIFdlIGJ1aWx0IGl0IGZvciBvdXJzZWx2ZXMgZmlyc3QuIENvZGUgb3V0cHV0IHBlciBBbnRocm9waWMgZW5naW5lZXIgaXMgdXAgMjAwJSB0aGlzIHllYXIgYW5kIHJldmlld3Mgd2VyZSB0aGUgYm90dGxlbmVjayBcdTIwMTQgaXQgY2F0Y2hlcyBtYW55IHJlYWwgYnVncyBJIHdvdWxkbid0IGhhdmUgbm90aWNlZCBvdGhlcndpc2UuIiwic3RhdHMiOiJcdWQ4M2RcdWRjYWMgNDU5XHVkODNkXHVkZDAxIDYzMFx1Mjc2NFx1ZmUwZiA3LjRrXHVkODNkXHVkYzQxIDEuMU0ifSx7ImJyYW5kIjoiY2xhdWRlIiwidXJsIjoiaHR0cHM6Ly94LmNvbS9iY2hlcm55L3N0YXR1cy8yMDM2Mjg2NTkyMDg5MDIyNjk5IiwibmFtZSI6IkJvcmlzIENoZXJueSIsImhhbmRsZSI6IkBiY2hlcm55IFx1MDBiNyBNYXIgMjMiLCJ0ZXh0IjoiTGl0dGxlIGtub3duIGZhY3Q6IHRoZSBBbnRocm9waWMgTGFicyB0ZWFtIHNoaXBwZWQgTUNQLCBTa2lsbHMsIENsYXVkZSBEZXNrdG9wLCBhbmQgQ2xhdWRlIENvZGUuIEp1c3QgYSBmZXcgb2YgdXMsIHNoaXBwaW5nIGZhc3QuIFRob3NlIGVhcmx5IGNvbXB1dGVyIHVzZSBwcm90b3R5cGVzIGZlbHQgY2x1bmt5LiBCdXQgZWFzeSB0byBzcXVpbnQgYW5kIGltYWdpbmUgd2hhdCBpdCB3b3VsZCBiZSBvbmNlIGl0IGdvdCByZWFsbHkgZ29vZC4gVG9kYXkgd2Ugc2hpcHBlZCBmdWxsIGNvbXB1dGVyIHVzZSBpbiBDb3dvcmsgYW5kIERpc3BhdGNoLiBSZWFsbHkgZXhjaXRlZCB0byBzZWUgd2hhdCB5b3UgZG8gd2l0aCBpdC4iLCJzdGF0cyI6Ilx1ZDgzZFx1ZGNhYyAzMTJcdWQ4M2RcdWRkMDEgODkwXHUyNzY0XHVmZTBmIDkuMmtcdWQ4M2RcdWRjNDEgMi4zTSJ9LHsiYnJhbmQiOiJjbGF1ZGUiLCJ1cmwiOiJodHRwczovL3guY29tL21pa2V5ayIsIm5hbWUiOiJNaWtlIEtyaWVnZXIiLCJoYW5kbGUiOiJAbWlrZXlrIFx1MDBiNyBNYXIgMTciLCJ0ZXh0IjoiTUNQIGlzIG5vdyBhdCA5N00gbW9udGhseSBTREsgZG93bmxvYWRzLiBUaGF0J3MgdXAgZnJvbSB+Mk0gaW4gTm92IDIwMjUgXHUyMDE0IDQsNzUwJSBncm93dGggaW4gMTYgbW9udGhzLiBXaGVuIHdlIGJ1aWx0IGl0LCB0d28gZW5naW5lZXJzIGp1c3Qgbm90aWNlZCB3ZSBrZXB0IHdyaXRpbmcgYmVzcG9rZSBpbnRlZ3JhdGlvbnMgZm9yIGV2ZXJ5IHRvb2wuIFRoZXkgcHJvdG90eXBlZCBhIHVuaWZpZWQgcHJvdG9jb2wuIE5vdyBpdCdzIHRoZSBmYXN0ZXN0LWdyb3dpbmcgc3RhbmRhcmQgaW4gdGVjaCBoaXN0b3J5LiIsInN0YXRzIjoiXHVkODNkXHVkY2FjIDUyOFx1ZDgzZFx1ZGQwMSAyLjFrXHUyNzY0XHVmZTBmIDE0LjNrXHVkODNkXHVkYzQxIDQuMU0ifSx7ImJyYW5kIjoiY2xhdWRlIiwidXJsIjoiaHR0cHM6Ly94LmNvbS9mZWxpeHJpZXNlYmVyZyIsIm5hbWUiOiJGZWxpeCBSaWVzZWJlcmciLCJoYW5kbGUiOiJAZmVsaXhyaWVzZWJlcmcgXHUwMGI3IE1hciAyMyIsInRleHQiOiJDb21wdXRlciBVc2UgaW4gQ293b3JrIGlzIGxpdmUuIENsYXVkZSBjYW4gb3BlbiBhcHBzLCBjbGljaywgdHlwZSwgbmF2aWdhdGUgeW91ciBzY3JlZW4gXHUyMDE0IGFuZCB5b3UgY2FuIGNvbnRyb2wgaXQgZnJvbSB5b3VyIHBob25lIHZpYSBEaXNwYXRjaCB3aGlsZSB5b3VyIGxhcHRvcCBzdGF5cyBhdCB5b3VyIGRlc2suIFRoaXMgaXMgd2hhdCB3ZSd2ZSBiZWVuIGJ1aWxkaW5nIHRvd2FyZCBzaW5jZSB0aGUgZWFybHkgU29ubmV0IDMuNiBkZXNrdG9wIGV4cGVyaW1lbnRzLiIsInN0YXRzIjoiXHVkODNkXHVkY2FjIDIwMVx1ZDgzZFx1ZGQwMSA3NDRcdTI3NjRcdWZlMGYgNS44a1x1ZDgzZFx1ZGM0MSAxLjZNIn0seyJicmFuZCI6Im9wZW5haSIsInVybCI6Imh0dHBzOi8veC5jb20vc2FtYSIsIm5hbWUiOiJTYW0gQWx0bWFuIiwiaGFuZGxlIjoiQHNhbWEgXHUwMGI3IE1hciA1IiwidGV4dCI6IkdQVC01LjQgaXMgb3V0LiBPdXIgbW9zdCBjYXBhYmxlIGFuZCBlZmZpY2llbnQgZnJvbnRpZXIgbW9kZWwgZm9yIHByb2Zlc3Npb25hbCB3b3JrLiBJdCBtZXJnZXMgdGhlIGJlc3Qgb2YgcmVhc29uaW5nICsgb3VyIGZyb250aWVyIGNvZGluZyBjYXBhYmlsaXRpZXMgaW50byBvbmUgbW9kZWwgXHUyMDE0IGFuZCBpdCdzIHRoZSBmaXJzdCBnZW5lcmFsLXB1cnBvc2UgbW9kZWwgd2UndmUgcmVsZWFzZWQgd2l0aCBuYXRpdmUgY29tcHV0ZXItdXNlLiBTaGlwcGluZyB0byBDaGF0R1BULCBBUEksIGFuZCBDb2RleCB0b2RheS4iLCJzdGF0cyI6Ilx1ZDgzZFx1ZGNhYyAzLjJrXHVkODNkXHVkZDAxIDguN2tcdTI3NjRcdWZlMGYgNjdrXHVkODNkXHVkYzQxIDE4TSJ9LHsiYnJhbmQiOiJvcGVuYWkiLCJ1cmwiOiJodHRwczovL3guY29tL2dkYiIsIm5hbWUiOiJHcmVnIEJyb2NrbWFuIiwiaGFuZGxlIjoiQGdkYiBcdTAwYjcgTWFyIDUiLCJ0ZXh0IjoiR1BULTUuNCByZXByZXNlbnRzIGEgZ2VudWluZSBhcmNoaXRlY3R1cmFsIHNoaWZ0IFx1MjAxNCBub3QganVzdCBhIGJldHRlciBtb2RlbCwgYnV0IG9uZSB0aGF0IGNhbiBzZWUgc2NyZWVucywgdXNlIGNvbXB1dGVycywgc2VhcmNoIGFjcm9zcyB0b29sIGVjb3N5c3RlbXMsIGFuZCByZWFzb24gYWNyb3NzIDFNIHRva2VucyBvZiBjb250ZXh0LiBUaGlzIGlzIHdoYXQgXCJBSSBmb3IgcHJvZmVzc2lvbmFsIHdvcmtcIiBhY3R1YWxseSBtZWFucy4gV2UgYnVpbHQgZm9yIHRoZSByZWFsIHdvcmtkYXkuIiwic3RhdHMiOiJcdWQ4M2RcdWRjYWMgMS40a1x1ZDgzZFx1ZGQwMSA0LjFrXHUyNzY0XHVmZTBmIDI5a1x1ZDgzZFx1ZGM0MSA4LjJNIn0seyJicmFuZCI6Im9wZW5haSIsInVybCI6Imh0dHBzOi8veC5jb20vcm9tYWluaHVldCIsIm5hbWUiOiJSb21haW4gSHVldCIsImhhbmRsZSI6IkByb21haW5odWV0IFx1MDBiNyBNYXIgMTciLCJ0ZXh0IjoiU3ViYWdlbnRzIGluIENvZGV4IGFyZSBub3cgbGl2ZS4gU3BpbiB1cCBtdWx0aXBsZSBhZ2VudHMgd29ya2luZyBpbiBwYXJhbGxlbCBvbiBkaWZmZXJlbnQgcGFydHMgb2YgeW91ciBjb2RlYmFzZSB3aXRoIHBhdGgtYmFzZWQgYWRkcmVzc2VzLCBzdHJ1Y3R1cmVkIGludGVyLWFnZW50IG1lc3NhZ2luZywgYW5kIGFnZW50IGxpc3RpbmcuIFRoaXMgaXMgdGhlIFwiZGV2IHRlYW0gdGhhdCBuZXZlciBzbGVlcHNcIiBwYXR0ZXJuIGJlY29taW5nIGEgcmVhbGl0eS4iLCJzdGF0cyI6Ilx1ZDgzZFx1ZGNhYyAzODdcdWQ4M2RcdWRkMDEgMS4ya1x1Mjc2NFx1ZmUwZiA4LjlrXHVkODNkXHVkYzQxIDIuN00ifSx7ImJyYW5kIjoib3BlbmFpIiwidXJsIjoiaHR0cHM6Ly94LmNvbS9ucGV3IiwibmFtZSI6IlBldGVyIFdlbGluZGVyIiwiaGFuZGxlIjoiQG5wZXcgXHUwMGI3IE1hciAyNCIsInRleHQiOiJHUFQtNS40IE1pbmkgaXMgbm93IGF2YWlsYWJsZSB0byBGcmVlIGFuZCBHbyB1c2Vycy4gRnJvbnRpZXItcXVhbGl0eSByZWFzb25pbmcsIGF2YWlsYWJsZSB0byBldmVyeW9uZS4gVGhlIGNvc3QgY3VydmUgZm9yIGludGVsbGlnZW5jZSBoYXMgY29sbGFwc2VkIHNvIGZhc3QgdGhhdCB0aGUgcXVlc3Rpb24gaXMgbm8gbG9uZ2VyIFwiY2FuIHdlIGFmZm9yZCB0aGlzP1wiIFx1MjAxNCBpdCdzIFwid2hhdCBkbyB3ZSBidWlsZCBub3cgdGhhdCBpdCdzIGZyZWU/XCIiLCJzdGF0cyI6Ilx1ZDgzZFx1ZGNhYyA4OTJcdWQ4M2RcdWRkMDEgMy40a1x1Mjc2NFx1ZmUwZiAyMmtcdWQ4M2RcdWRjNDEgNi4xTSJ9XSwicmVkZGl0IjpbeyJicmFuZCI6ImNsYXVkZSIsInN1YiI6InIvQ2xhdWRlQUkiLCJ2b3RlcyI6Ilx1MjViMiA0LjJrIiwicXVvdGUiOiJcIkNvbXB1dGVyIHVzZSBqdXN0IG1hZGUgbWUgZmVlbCBsaWtlIEknbSBsaXZpbmcgaW4gYSBzY2ktZmkgbW92aWUuIEFza2VkIENsYXVkZSB0byBjb21waWxlIG15IHF1YXJ0ZXJseSByZXBvcnQgd2hpbGUgSSB3YXMgaW4gYSBtZWV0aW5nLiBDYW1lIGJhY2sgdG8gYSBmaW5pc2hlZCBQREYuIFRoaXMgaXMgbm90IGEgZHJpbGwuXCIiLCJ0b3BpYyI6ImNvbXB1dGVyLXVzZSIsInNlbnRpbWVudCI6InBvcyIsInBjdCI6OTEsImVtb2ppIjoiXHVkODNkXHVkZDI1In0seyJicmFuZCI6ImNsYXVkZSIsInN1YiI6InIvQ2xhdWRlQUkiLCJ2b3RlcyI6Ilx1MjViMiAzLjFrIiwicXVvdGUiOiJcIjc0IHJlbGVhc2VzIGluIDUyIGRheXMuIEkgd29yayBpbiBwcm9kdWN0IGFuZCB0aGlzIGNhZGVuY2UgaXMgZ2VudWluZWx5IHVucmVhbC4gV2UgY2FuJ3QgZXZlbiBzaGlwIG9uZSBmZWF0dXJlIHBlciBzcHJpbnQgd2l0aG91dCBpdCBjYXRjaGluZyBmaXJlLlwiIiwidG9waWMiOiJyZWxlYXNlLXZlbG9jaXR5Iiwic2VudGltZW50IjoibWl4IiwicGN0Ijo3NSwiZW1vamkiOiJcdWQ4M2RcdWRlMjQifSx7ImJyYW5kIjoiY2xhdWRlIiwic3ViIjoici9hcnRpZmljaWFsIiwidm90ZXMiOiJcdTI1YjIgMi44ayIsInF1b3RlIjoiXCJDbGF1ZGUgQ29kZSBTZWN1cml0eSBmb3VuZCAxMiB2dWxuZXJhYmlsaXRpZXMgaW4gb3VyIGNvZGViYXNlIHRoYXQgb3VyICQ0MGsveWVhciBTbnlrIHN1YnNjcmlwdGlvbiBoYWQgbmV2ZXIgZmxhZ2dlZC4gU3VibWl0dGVkIGEgcmVmdW5kIHJlcXVlc3QgdG8gU255ayB0aGlzIG1vcm5pbmcuXCIiLCJ0b3BpYyI6ImNsYXVkZS1jb2RlLXNlY3VyaXR5Iiwic2VudGltZW50IjoicG9zIiwicGN0Ijo4OCwiZW1vamkiOiJcdWQ4M2RcdWRjODAifSx7ImJyYW5kIjoiY2xhdWRlIiwic3ViIjoici9DbGF1ZGVBSSIsInZvdGVzIjoiXHUyNWIyIDIuNGsiLCJxdW90ZSI6IlwiVGhlIHVzYWdlIGxpbWl0cyB0aWdodGVuaW5nIGR1cmluZyBwZWFrIGhvdXJzIHdoaWxlIHRoZXkncmUgZG91YmxpbmcgbGltaXRzIG9mZi1wZWFrIGlzIGFjdHVhbGx5IGdlbml1cyBwcm9kdWN0IGRlc2lnbi4gVGhleSdyZSB0cmFpbmluZyBtZSBsaWtlIGEgUGF2bG92aWFuIGRvZyB0byB1c2UgQ2xhdWRlIGF0IDZhbS5cIiIsInRvcGljIjoidXNhZ2UtbGltaXRzIiwic2VudGltZW50",
+    "IjoibWl4IiwicGN0Ijo2MCwiZW1vamkiOiJcdWQ4M2RcdWRlMDUifSx7ImJyYW5kIjoiY2xhdWRlIiwic3ViIjoici9Qcm9kdWN0TWFuYWdlbWVudCIsInZvdGVzIjoiXHUyNWIyIDEuOWsiLCJxdW90ZSI6IlwiQXMgYSBQTSBJIHVzZWQgdG8gd3JpdGUgc3BlY3MuIE5vdyBJIHdyaXRlIHNwZWNzLCBoYW5kIHRoZW0gdG8gQ2xhdWRlIENvZGUsIGFuZCBpdCByZXR1cm5zIGEgd29ya2luZyBwcm90b3R5cGUuIE15IGVuZyB0ZWFtIGlzIGJvdGggaW1wcmVzc2VkIGFuZCBtaWxkbHkgdGVycmlmaWVkLlwiIiwidG9waWMiOiJjbGF1ZGUtY29kZSBcdTAwYjcgcG0td29ya2Zsb3ciLCJzZW50aW1lbnQiOiJwb3MiLCJwY3QiOjg1LCJlbW9qaSI6Ilx1ZDgzZFx1ZGU4MCJ9LHsiYnJhbmQiOiJjbGF1ZGUiLCJzdWIiOiJyL0FudGhyb3BpYyIsInZvdGVzIjoiXHUyNWIyIDEuN2siLCJxdW90ZSI6IlwiVGhlIENsYXVkZSBNeXRob3MgbGVhayBpcyBwZWFrIHN0YXJ0dXAgY2hhb3MuIDMsMDAwIGZpbGVzIGp1c3QuLi4gc2l0dGluZyB0aGVyZSBwdWJsaWNseS4gQnV0IGhvbmVzdGx5IHRoZSBmYWN0IHRoYXQgaXQncyB0aGUgbW9zdCBjYXBhYmxlIG1vZGVsIHRoZXkndmUgYnVpbHQgaXMgbW9yZSBleGNpdGluZyB0aGFuIHRoZSBsZWFrIGlzIGVtYmFycmFzc2luZy5cIiIsInRvcGljIjoiY2xhdWRlLW15dGhvcyIsInNlbnRpbWVudCI6Im1peCIsInBjdCI6NzAsImVtb2ppIjoiXHVkODNkXHVkYzQwIn0seyJicmFuZCI6ImNsYXVkZSIsInN1YiI6InIvQ2xhdWRlQUkiLCJ2b3RlcyI6Ilx1MjViMiAxLjVrIiwicXVvdGUiOiJcIk1lbW9yeSBmb3IgZnJlZSB1c2VycyBpcyBjcmltaW5hbGx5IHVuZGVycmF0ZWQgbmV3cy4gSSd2ZSBiZWVuIHBhc3RpbmcgdGhlIHNhbWUgY29udGV4dCBwYXJhZ3JhcGggaW50byBldmVyeSBuZXcgY2hhdCBmb3IgNiBtb250aHMuIFRoYXQgZW5kcyB0b2RheS5cIiIsInRvcGljIjoibWVtb3J5IFx1MDBiNyBmcmVlLXRpZXIiLCJzZW50aW1lbnQiOiJwb3MiLCJwY3QiOjk3LCJlbW9qaSI6Ilx1ZDgzZFx1ZGU0YyJ9LHsiYnJhbmQiOiJjbGF1ZGUiLCJzdWIiOiJyL01hY2hpbmVMZWFybmluZyIsInZvdGVzIjoiXHUyNWIyIDEuM2siLCJxdW90ZSI6IlwiTUNQIGF0IDk3TSBpbnN0YWxscyBpcyB0aGUgcXVpZXQgc3Rvcnkgb2YgUTEgMjAyNi4gRXZlcnlvbmUncyB0YWxraW5nIGFib3V0IG1vZGVscyBidXQgdGhlIHByb3RvY29sIGxheWVyIGlzIHdoZXJlIHRoZSByZWFsIHBsYXRmb3JtIHdhciBpcyBiZWluZyBmb3VnaHQuXCIiLCJ0b3BpYyI6Ik1DUCBcdTAwYjcgcGxhdGZvcm0iLCJzZW50aW1lbnQiOiJwb3MiLCJwY3QiOjgyLCJlbW9qaSI6Ilx1ZDgzZVx1ZGRlMCJ9LHsiYnJhbmQiOiJjbGF1ZGUiLCJzdWIiOiJyL0NsYXVkZUFJIiwidm90ZXMiOiJcdTI1YjIgOTg3IiwicXVvdGUiOiJcIk15IE1heCBwbGFuIGhpdCAxMDAlIHVzYWdlIGluIDkwIG1pbnV0ZXMgeWVzdGVyZGF5LiBJIHBheSAkMjAwL21vbnRoLiBBbnRocm9waWMgaXMgZXhwZXJpZW5jaW5nIGEgdmVyeSByZWxhdGFibGUgc3RhcnR1cCBzY2FsaW5nIHByb2JsZW0gZXhjZXB0IGF0IGJpbGxpb24tZG9sbGFyIHNjYWxlLlwiIiwidG9waWMiOiJ1c2FnZS1saW1pdHMgXHUwMGI3IHNjYWxpbmciLCJzZW50aW1lbnQiOiJuZWciLCJwY3QiOjY1LCJlbW9qaSI6Ilx1ZDgzZFx1ZGUyYyJ9LHsiYnJhbmQiOiJvcGVuYWkiLCJzdWIiOiJyL09wZW5BSSIsInZvdGVzIjoiXHUyNWIyIDUuMWsiLCJxdW90ZSI6IlwiR1BULTUuNCBpcyBnZW51aW5lbHkgYSBkaWZmZXJlbnQgdGllci4gSSB0aHJldyBteSBjb21wYW55J3MgZW50aXJlIDQwMC1wYWdlIGZpbmFuY2lhbCBtb2RlbCBhdCBpdCBhbmQgaXQgZGlkbid0IGp1c3Qgc3VtbWFyaXplIFx1MjAxNCBpdCBmb3VuZCB0aHJlZSBhY2NvdW50aW5nIGVycm9ycyB3ZSdkIG1pc3NlZCBmb3IgdHdvIHF1YXJ0ZXJzLlwiIiwidG9waWMiOiJncHQtNS40IFx1MDBiNyBlbnRlcnByaXNlIiwic2VudGltZW50IjoicG9zIiwicGN0Ijo5NCwiZW1vamkiOiJcdWQ4M2RcdWRkMjUifSx7ImJyYW5kIjoib3BlbmFpIiwic3ViIjoici9DaGF0R1BUIiwidm90ZXMiOiJcdTI1YjIgMy43ayIsInF1b3RlIjoiXCJDb2RleCBzdWJhZ2VudHMgYXJlIHdpbGQuIEkgc3B1biB1cCA0IHBhcmFsbGVsIGFnZW50cyB0byB3b3JrIG9uIGRpZmZlcmVudCBwYXJ0cyBvZiBhIGNvZGViYXNlIHNpbXVsdGFuZW91c2x5LiBJdCdzIGxpa2UgaGlyaW5nIGEgZGV2IHRlYW0gZXhjZXB0IHRoZXkgZG9uJ3QgbmVlZCBzdGFuZHVwcy5cIiIsInRvcGljIjoiY29kZXggXHUwMGI3IHN1YmFnZW50cyIsInNlbnRpbWVudCI6InBvcyIsInBjdCI6ODksImVtb2ppIjoiXHVkODNlXHVkZDJmIn0seyJicmFuZCI6Im9wZW5haSIsInN1YiI6InIvQ2hhdEdQVCIsInZvdGVzIjoiXHUyNWIyIDIuNmsiLCJxdW90ZSI6IlwiVGhlIGludGVyYWN0aXZlIG1hdGggbW9kdWxlcyBpbiBDaGF0R1BUIGFyZSBnZW51aW5lbHkgdGhlIGJlc3QgZWR1Y2F0aW9uYWwgVUkgSSd2ZSBldmVyIHNlZW4uIEtoYW4gQWNhZGVteSBzaG91bGQgYmUgc2NhcmVkLiBNeSBraWQgc3BlbnQgMiBob3VycyBvbiBpdCB3aXRob3V0IGJlaW5nIGFza2VkLlwiIiwidG9waWMiOiJlZHVjYXRpb24gXHUwMGI3IGNoYXRncHQiLCJzZW50aW1lbnQiOiJwb3MiLCJwY3QiOjkzLCJlbW9qaSI6Ilx1ZDgzY1x1ZGY5MyJ9LHsiYnJhbmQiOiJvcGVuYWkiLCJzdWIiOiJyL2FydGlmaWNpYWwiLCJ2b3RlcyI6Ilx1MjViMiAyLjJrIiwicXVvdGUiOiJcIkJvdGggQW50aHJvcGljIEFORCBPcGVuQUkgbGF1bmNoZWQgRXhjZWwgaW50ZWdyYXRpb25zIGluIHRoZSBzYW1lIHdlZWsuIFRoZSBzcHJlYWRzaGVldCBoYXMgYmVjb21lIHRoZSBuZXcgY2hhdGJvdCBpbnRlcmZhY2UuIE15IDYyLXllYXItb2xkIENGTyBpcyBnb2luZyB0byBiZWNvbWUgYW4gQUkgcG93ZXIgdXNlciB3aGV0aGVyIHNoZSBsaWtlcyBpdCBvciBub3QuXCIiLCJ0b3BpYyI6ImV4Y2VsIFx1MDBiNyBlbnRlcnByaXNlLWFpIiwic2VudGltZW50IjoibWl4IiwicGN0Ijo3MiwiZW1vamkiOiJcdWQ4M2RcdWRjY2EifSx7ImJyYW5kIjoib3BlbmFpIiwic3ViIjoici9PcGVuQUkiLCJ2b3RlcyI6Ilx1MjViMiAxLjhrIiwicXVvdGUiOiJcIkdQVC01LjQgbWluaSBpcyBmcmVlIG5vdy4gRnJvbnRpZXItcXVhbGl0eSByZWFzb25pbmcgYXZhaWxhYmxlIHRvIGFueW9uZSBmb3IgJDAuIEkgZ2VudWluZWx5IGRvbid0IHVuZGVyc3RhbmQgdGhlIGVjb25vbWljcyBidXQgSSdtIG5vdCBjb21wbGFpbmluZy5cIiIsInRvcGljIjoiZ3B0LTUuNC1taW5pIFx1MDBiNyBmcmVlLXRpZXIiLCJzZW50aW1lbnQiOiJwb3MiLCJwY3QiOjk2LCJlbW9qaSI6Ilx1ZDgzZVx1ZGQxMSJ9LHsiYnJhbmQiOiJvcGVuYWkiLCJzdWIiOiJyL1Byb2R1Y3RNYW5hZ2VtZW50Iiwidm90ZXMiOiJcdTI1YjIgMS40ayIsInF1b3RlIjoiXCJDb1QgY29udHJvbGxhYmlsaXR5IGluIENvZGV4IGxldHMgbWUgc2VlIGV4YWN0bHkgaG93IGl0IHJlYXNvbmVkIHRocm91Z2ggYSBwcm9ibGVtLiBUaGlzIGlzIHRoZSBmaXJzdCBBSSBmZWF0dXJlIHRoYXQgYWN0dWFsbHkgaGVscHMgbWUgZXhwbGFpbiB0byBteSBsZWdhbCB0ZWFtIHdoeSB3ZSB0cnVzdCB0aGUgb3V0cHV0LlwiIiwidG9waWMiOiJjb2RleCBcdTAwYjcgdHJhbnNwYXJlbmN5IFx1MDBiNyBwbSIsInNlbnRpbWVudCI6InBvcyIsInBjdCI6ODcsImVtb2ppIjoiXHUyNjk2XHVmZTBmIn1dLCJuYXJyYXRpdmVzIjp7Im1hciI6eyJoZWFkbGluZSI6Ik1hcmNoIHdhcyB0aGUgbW9udGggYWdlbnRpYyBBSSBzdG9wcGVkIGJlaW5nIGEgZGVtby4iLCJib2R5IjoiQm90aCBBbnRocm9waWMgYW5kIE9wZW5BSSBzaGlwcGVkIGNvbXB1dGVyIHVzZSwgcGVyc2lzdGVudCBhZ2VudCB0aHJlYWRzLCBzY2hlZHVsZWQgdGFza3MsIGFuZCBwYXJhbGxlbCBjb2Rpbmcgd29ya2Zsb3dzIFx1MjAxNCBhbGwgaW4gdGhlIHNhbWUgMzEgZGF5cy4gVGhlIHBhdHRlcm4gaXMgY2xlYXI6IHRoZSByYWNlIGlzIG5vIGxvbmdlciBhYm91dCBtb2RlbCBpbnRlbGxpZ2VuY2UsIGl0J3MgYWJvdXQgYXV0b25vbW91cyBleGVjdXRpb24uIENsYXVkZSBjYW4gbm93IGNvbnRyb2wgeW91ciBNYWMgd2hpbGUgeW91IHNsZWVwLiBDb2RleCBjYW4gc3BpbiB1cCBmb3VyIGFnZW50cyBvbiB5b3VyIGNvZGViYXNlIHNpbXVsdGFuZW91c2x5LiBGb3IgUE1zLCB0aGlzIGNoYW5nZXMgdGhlIHVuaXQgb2Ygd29yayBmcm9tICd3aGF0IGNhbiBBSSBoZWxwIG1lIHdyaXRlPycgdG8gJ3doYXQgY2FuIEkgZGVsZWdhdGUgYW5kIG5ldmVyIHRoaW5rIGFib3V0IGFnYWluLicgVGhlIHByb2R1Y3RzIHRoYXQgd2luIGluIHRoaXMgZW52aXJvbm1lbnQgYXJlIHRoZSBvbmVzIGRlc2lnbmVkIGZvciBhc3luYywgbm90IGZvciBjaGF0LiIsInN0YXRzIjpbeyJudW0iOiIyMyIsImxhYmVsIjoiUmVsZWFzZXMgc2hpcHBlZCJ9LHsibnVtIjoiMiIsImxhYmVsIjoiQ29tcHV0ZXIgdXNlIGxhdW5jaGVzIn0seyJudW0iOiI5N00iLCJsYWJlbCI6Ik1DUCBtb250aGx5IGluc3RhbGxzIn0seyJudW0iOiIxOCIsImxhYmVsIjoiQWN0aXZlIHNoaXAgZGF5cyJ9XSwidGFncyI6WyJcdWQ4M2VcdWRkMTYgQWdlbnRpYyBpbmZsZWN0aW9uIHBvaW50IiwiXHVkODNkXHVkZGE1XHVmZTBmIENvbXB1dGVyIHVzZSBnb2VzIGNvbnN1bWVyIiwiXHVkODNkXHVkZDE3IFBsYXRmb3JtIHdhcnMgaGVhdGluZyB1cCJdfSwiYXByIjp7ImhlYWRsaW5lIjoiQXByaWwgaXMgd2hlbiB0aGUgZnJvbnRpZXIgZ2V0cyBleHBlbnNpdmUgYW5kIHRoZSBzdGFrZXMgZ2V0IHJlYWwuIiwiYm9keSI6IkNsYXVkZSBNeXRob3MgaXMgcmVhbCwgdHJhaW5pbmcgaXMgZG9uZSwgYW5kIGl0J3MgcHJpY2VkIGZvciBnb3Zlcm5tZW50cyBhbmQgc2VjdXJpdHkgdGVhbXMgXHUyMDE0IG5vdCBkZXZlbG9wZXJzLiBIYWlrdSAzIGRpZXMgb24gQXByaWwgMTkuIE9wZW5BSSdzICdTcHVkJyBpcyBwcmV0cmFpbmluZy1jb21wbGV0ZSBhbmQgY291bGQgZHJvcCBhbnkgd2Vlay4gQm90aCBjb21wYW5pZXMgYXJlIGJ1cm5pbmcgY29tcHV0ZSBmYXN0ZXIgdGhhbiB0aGV5IGNhbiBzZXJ2ZSBpdCwgYW5kIHRoZSBnYXAgYmV0d2VlbiB3aGF0IGVudGVycHJpc2VzIGNhbiBhZmZvcmQgYW5kIHdoYXQgaW5kaXZpZHVhbHMgY2FuIGFjY2VzcyBpcyB3aWRlbmluZy4gRm9yIFBNczogaWYgeW91IGhhdmVuJ3Qgc3RyZXNzLXRlc3RlZCB5b3VyIG1vZGVsIGRlcGVuZGVuY2llcyBhbmQgYnVpbHQgdXBncmFkZSBwYXRocyBpbnRvIHlvdXIgYXJjaGl0ZWN0dXJlLCBBcHJpbCBpcyB5b3VyIHdha2UtdXAgY2FsbC4iLCJzdGF0cyI6W3sibnVtIjoiQXByIDE5IiwibGFiZWwiOiJIYWlrdSAzIHJldGlyZXMifSx7Im51bSI6IjR0aCIsImxhYmVsIjoiQW50aHJvcGljIHRpZXIgaW5jb21pbmcifSx7Im51bSI6IjIiLCJsYWJlbCI6IkZyb250aWVyIG1vZGVscyBleHBlY3RlZCJ9LHsibnVtIjoiXHUyNmEwXHVmZTBmIiwibGFiZWwiOiJNaWdyYXRlIG5vdyJ9XSwidGFncyI6WyJcdWQ4M2RcdWRkMmQgRnJvbnRpZXIgdGllciBhYm92ZSBPcHVzIiwiXHVkODNkXHVkY2IwIFByaWNpbmcgcHJlc3N1cmUgYnVpbGRpbmciLCJcdTI2YTBcdWZlMGYgRGVwcmVjYXRpb24gZGVhZGxpbmUiXX19fQ=="
+].join('')));}catch(e){return null;}
+})();
+</script>
+</head>
+<body>
+
+<div class="loading-screen" id="loading-screen">
+  <div class="loading-spinner"></div>
+  <div class="loading-text">Loading releases…</div>
+</div>
+
+<div class="top-bar">
+  <div class="pill-toggle">
+      <button class="brand-tab active-claude" id="tab-claude" onclick="filter('claude', this)">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
+          <path d="M12 2 L12.8 8.5 L18 5 L14.5 10.2 L21 11 L14.5 13.8 L18 19 L12.8 15.5 L12 22 L11.2 15.5 L6 19 L9.5 13.8 L3 11 L9.5 10.2 L6 5 L11.2 8.5 Z"/>
+        </svg>
+        Claude
+      </button>
+      <button class="brand-tab" id="tab-openai" onclick="filter('openai', this)">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
+          <path d="M22.282 9.821a5.985 5.985 0 0 0-.516-4.91 6.046 6.046 0 0 0-6.51-2.9A6.065 6.065 0 0 0 4.981 4.18a5.985 5.985 0 0 0-3.998 2.9 6.046 6.046 0 0 0 .743 7.097 5.98 5.98 0 0 0 .51 4.911 6.051 6.051 0 0 0 6.515 2.9A5.985 5.985 0 0 0 13.26 24a6.056 6.056 0 0 0 5.772-4.206 5.99 5.99 0 0 0 3.997-2.9 6.056 6.056 0 0 0-.747-7.073zM13.26 22.43a4.476 4.476 0 0 1-2.876-1.04l.141-.081 4.779-2.758a.795.795 0 0 0 .392-.681v-6.737l2.02 1.168a.071.071 0 0 1 .038.052v5.583a4.504 4.504 0 0 1-4.494 4.494zM3.6 18.304a4.47 4.47 0 0 1-.535-3.014l.142.085 4.783 2.759a.771.771 0 0 0 .78 0l5.843-3.369v2.332a.08.08 0 0 1-.033.062L9.74 19.95a4.5 4.5 0 0 1-6.14-1.646zM2.34 7.896a4.485 4.485 0 0 1 2.366-1.973V11.6a.766.766 0 0 0 .388.676l5.815 3.355-2.02 1.168a.076.076 0 0 1-.071 0L4.06 14.115A4.501 4.501 0 0 1 2.34 7.896zm16.597 3.855l-5.833-3.387L15.119 7.2a.076.076 0 0 1 .071 0l4.758 2.748a4.496 4.496 0 0 1-.676 8.108v-5.68a.79.79 0 0 0-.384-.676zm2.01-3.023l-.141-.085-4.774-2.782a.776.776 0 0 0-.785 0L9.409 9.23V6.897a.066.066 0 0 1 .028-.061l4.76-2.744a4.496 4.496 0 0 1 6.664 4.66zm-12.64 4.135l-2.02-1.164a.08.08 0 0 1-.038-.057V6.075a4.496 4.496 0 0 1 7.375-3.453l-.142.08L8.704 5.46a.795.795 0 0 0-.393.681zm1.097-2.365l2.602-1.5 2.607 1.5v2.999l-2.597 1.5-2.607-1.5z"/>
+        </svg>
+        OpenAI
+      </button>
+  </div>
+</div>
+
+
+<div class="header">
+  <div class="header-eyebrow" id="header-eyebrow">
+    <svg width="13" height="13" viewBox="0 0 24 24" fill="currentColor" style="display:inline;vertical-align:middle;margin-right:6px" id="eyebrow-icon"><path id="eyebrow-icon-path" d="M12 2 L12.8 8.5 L18 5 L14.5 10.2 L21 11 L14.5 13.8 L18 19 L12.8 15.5 L12 22 L11.2 15.5 L6 19 L9.5 13.8 L3 11 L9.5 10.2 L6 5 L11.2 8.5 Z"/></svg>
+    <span id="eyebrow-text">ANTHROPIC RELEASES — PM EDITION</span>
+  </div>
+  <h1 class="header-title">What <span id="brand-highlight">Claude Team</span> shipped that every PM needs to know</h1>
+  <div class="header-date" id="header-date">Mar 1, 2026 — Mar 31, 2026 · Product releases only · PM-annotated</div>
+  <div class="stats-row">
+    <div class="stat-block">
+      <div class="stat-num" id="stat-releases">—</div>
+      <div class="stat-label">RELEASES</div>
+    </div>
+    <div class="stat-block">
+      <div class="stat-num">31</div>
+      <div class="stat-label">DAYS</div>
+    </div>
+    <div class="stat-block">
+      <div class="stat-num" id="stat-active-days">18</div>
+      <div class="stat-label">ACTIVE DAYS</div>
+    </div>
+  </div>
+
+
+  <!-- CONTRIBUTORS ROW -->
+  <div class="contributors-row" id="contributors-row">
+    <!-- Anthropic contributors (shown by default) -->
+    <div class="contributor-group" id="contributors-claude">
+      <a class="contributor" href="https://x.com/DarioAmodei" target="_blank">
+        <img class="avatar" src="https://github.com/damodei.png" alt="DA" onerror="this.src='';this.outerHTML='<svg class=\'avatar\' viewBox=\'0 0 44 44\'><circle cx=\'22\' cy=\'22\' r=\'22\' fill=\'#2C1810\'/><text x=\'22\' y=\'27\' text-anchor=\'middle\' fill=\'white\' font-size=\'14\' font-family=\'system-ui\' font-weight=\'600\'>DA</text></svg>'">
+        <span>@DarioAmodei</span><span class="contrib-role">CEO</span>
+      </a>
+      <a class="contributor" href="https://x.com/danielaamodei" target="_blank">
+        <svg class="avatar" viewBox="0 0 44 44"><circle cx="22" cy="22" r="22" fill="#6B2D6B"/><text x="22" y="27" text-anchor="middle" fill="white" font-size="14" font-family="system-ui" font-weight="600">DA</text></svg>
+        <span>@danielaamodei</span><span class="contrib-role">President</span>
+      </a>
+      <a class="contributor" href="https://x.com/mikeyk" target="_blank">
+        <img class="avatar" src="https://github.com/mikeyk.png" alt="MK" onerror="this.src='';this.outerHTML='<svg class=\'avatar\' viewBox=\'0 0 44 44\'><circle cx=\'22\' cy=\'22\' r=\'22\' fill=\'#1E5A4A\'/><text x=\'22\' y=\'27\' text-anchor=\'middle\' fill=\'white\' font-size=\'14\' font-family=\'system-ui\' font-weight=\'600\'>MK</text></svg>'">
+        <span>@mikeyk</span><span class="contrib-role">CPO</span>
+      </a>
+      <a class="contributor" href="https://x.com/bcherny" target="_blank">
+        <img class="avatar" src="https://github.com/bcherny.png" alt="BC" onerror="this.src='';this.outerHTML='<svg class=\'avatar\' viewBox=\'0 0 44 44\'><circle cx=\'22\' cy=\'22\' r=\'22\' fill=\'#5C4033\'/><text x=\'22\' y=\'27\' text-anchor=\'middle\' fill=\'white\' font-size=\'14\' font-family=\'system-ui\' font-weight=\'600\'>BC</text></svg>'">
+        <span>@bcherny</span><span class="contrib-role">Claude Code</span>
+      </a>
+      <a class="contributor" href="https://x.com/trq212" target="_blank">
+        <svg class="avatar" viewBox="0 0 44 44"><circle cx="22" cy="22" r="22" fill="#4A3F6B"/><text x="22" y="27" text-anchor="middle" fill="white" font-size="14" font-family="system-ui" font-weight="600">TQ</text></svg>
+        <span>@trq212</span><span class="contrib-role">Eng</span>
+      </a>
+      <a class="contributor" href="https://x.com/noahzweben" target="_blank">
+        <img class="avatar" src="https://github.com/noahzweben.png" alt="NZ" onerror="this.src='';this.outerHTML='<svg class=\'avatar\' viewBox=\'0 0 44 44\'><circle cx=\'22\' cy=\'22\' r=\'22\' fill=\'#2D5E4E\'/><text x=\'22\' y=\'27\' text-anchor=\'middle\' fill=\'white\' font-size=\'14\' font-family=\'system-ui\' font-weight=\'600\'>NZ</text></svg>'">
+        <span>@noahzweben</span><span class="contrib-role">Eng</span>
+      </a>
+      <a class="contributor" href="https://x.com/felixrieseberg" target="_blank">
+        <img class="avatar" src="https://github.com/felixrieseberg.png" alt="FR" onerror="this.src='';this.outerHTML='<svg class=\'avatar\' viewBox=\'0 0 44 44\'><circle cx=\'22\' cy=\'22\' r=\'22\' fill=\'#7A3535\'/><text x=\'22\' y=\'27\' text-anchor=\'middle\' fill=\'white\' font-size=\'14\' font-family=\'system-ui\' font-weight=\'600\'>FR</text></svg>'">
+        <span>@felixrieseberg</span><span class="contrib-role">Desktop</span>
+      </a>
+      <a class="contributor" href="https://x.com/lydiahallie" target="_blank">
+        <img class="avatar" src="https://github.com/lydiahallie.png" alt="LH" onerror="this.src='';this.outerHTML='<svg class=\'avatar\' viewBox=\'0 0 44 44\'><circle cx=\'22\' cy=\'22\' r=\'22\' fill=\'#7D5A1E\'/><text x=\'22\' y=\'27\' text-anchor=\'middle\' fill=\'white\' font-size=\'14\' font-family=\'system-ui\' font-weight=\'600\'>LH</text></svg>'">
+        <span>@lydiahallie</span><span class="contrib-role">Eng</span>
+      </a>
+      <a class="contributor" href="https://x.com/amorriscode" target="_blank">
+        <img class="avatar" src="https://github.com/amorriscode.png" alt="AM" onerror="this.src='';this.outerHTML='<svg class=\'avatar\' viewBox=\'0 0 44 44\'><circle cx=\'22\' cy=\'22\' r=\'22\' fill=\'#1E4D6B\'/><text x=\'22\' y=\'27\' text-anchor=\'middle\' fill=\'white\' font-size=\'14\' font-family=\'system-ui\' font-weight=\'600\'>AM</text></svg>'">
+        <span>@amorriscode</span><span class="contrib-role">Eng</span>
+      </a>
+      <a class="contributor" href="https://x.com/feldman" target="_blank">
+        <svg class="avatar" viewBox="0 0 44 44"><circle cx="22" cy="22" r="22" fill="#5C3570"/><text x="22" y="27" text-anchor="middle" fill="white" font-size="14" font-family="system-ui" font-weight="600">FE</text></svg>
+        <span>@feldman</span><span class="contrib-role">Eng</span>
+      </a>
+      <a class="contributor" href="https://x.com/dickson_tsai" target="_blank">
+        <svg class="avatar" viewBox="0 0 44 44"><circle cx="22" cy="22" r="22" fill="#2E5E35"/><text x="22" y="27" text-anchor="middle" fill="white" font-size="14" font-family="system-ui" font-weight="600">DT</text></svg>
+        <span>@dickson_tsai</span><span class="contrib-role">Eng</span>
+      </a>
+    </div>
+    <!-- OpenAI contributors -->
+    <div class="contributor-group" id="contributors-openai" style="display:none">
+      <a class="contributor" href="https://x.com/sama" target="_blank">
+        <img class="avatar" src="https://github.com/sama.png" alt="SA" onerror="this.src='';this.outerHTML='<svg class=\'avatar\' viewBox=\'0 0 44 44\'><circle cx=\'22\' cy=\'22\' r=\'22\' fill=\'#2d2d5a\'/><text x=\'22\' y=\'27\' text-anchor=\'middle\' fill=\'white\' font-size=\'14\' font-family=\'system-ui\' font-weight=\'600\'>SA</text></svg>'">
+        <span>@sama</span><span class="contrib-role">CEO</span>
+      </a>
+      <a class="contributor" href="https://x.com/gdb" target="_blank">
+        <img class="avatar" src="https://github.com/gdb.png" alt="GB" onerror="this.src='';this.outerHTML='<svg class=\'avatar\' viewBox=\'0 0 44 44\'><circle cx=\'22\' cy=\'22\' r=\'22\' fill=\'#5a3d1e\'/><text x=\'22\' y=\'27\' text-anchor=\'middle\' fill=\'white\' font-size=\'14\' font-family=\'system-ui\' font-weight=\'600\'>GB</text></svg>'">
+        <span>@gdb</span><span class="contrib-role">President</span>
+      </a>
+      <a class="contributor" href="https://x.com/npew" target="_blank">
+        <svg class="avatar" viewBox="0 0 44 44"><circle cx="22" cy="22" r="22" fill="#1e3d5a"/><text x="22" y="27" text-anchor="middle" fill="white" font-size="14" font-family="system-ui" font-weight="600">PW</text></svg>
+        <span>@npew</span><span class="contrib-role">VP Product</span>
+      </a>
+      <a class="contributor" href="https://x.com/OpenAI" target="_blank">
+        <svg class="avatar" viewBox="0 0 44 44"><circle cx="22" cy="22" r="22" fill="#1a6b52"/><text x="22" y="27" text-anchor="middle" fill="white" font-size="14" font-family="system-ui" font-weight="600">OA</text></svg>
+        <span>@OpenAI</span><span class="contrib-role">Official</span>
+      </a>
+      <a class="contributor" href="https://x.com/OpenAIDevs" target="_blank">
+        <svg class="avatar" viewBox="0 0 44 44"><circle cx="22" cy="22" r="22" fill="#0f4d3a"/><text x="22" y="27" text-anchor="middle" fill="white" font-size="14" font-family="system-ui" font-weight="600">OD</text></svg>
+        <span>@OpenAIDevs</span><span class="contrib-role">Devrel</span>
+      </a>
+      <a class="contributor" href="https://x.com/romainhuet" target="_blank">
+        <svg class="avatar" viewBox="0 0 44 44"><circle cx="22" cy="22" r="22" fill="#6b2020"/><text x="22" y="27" text-anchor="middle" fill="white" font-size="14" font-family="system-ui" font-weight="600">RH</text></svg>
+        <span>@romainhuet</span><span class="contrib-role">Dev Exp</span>
+      </a>
+      <a class="contributor" href="https://x.com/DanielEdrisian" target="_blank">
+        <svg class="avatar" viewBox="0 0 44 44"><circle cx="22" cy="22" r="22" fill="#4d1e5a"/><text x="22" y="27" text-anchor="middle" fill="white" font-size="14" font-family="system-ui" font-weight="600">DE</text></svg>
+        <span>@DanielEdrisian</span><span class="contrib-role">Eng</span>
+      </a>
+      <a class="contributor" href="https://x.com/embirico" target="_blank">
+        <img class="avatar" src="https://github.com/embirico.png" alt="AE" onerror="this.src='';this.outerHTML='<svg class=\'avatar\' viewBox=\'0 0 44 44\'><circle cx=\'22\' cy=\'22\' r=\'22\' fill=\'#1e5a27\'/><text x=\'22\' y=\'27\' text-anchor=\'middle\' fill=\'white\' font-size=\'14\' font-family=\'system-ui\' font-weight=\'600\'>AE</text></svg>'">
+        <span>@embirico</span><span class="contrib-role">Eng</span>
+      </a>
+      <a class="contributor" href="https://x.com/bolinfest" target="_blank">
+        <img class="avatar" src="https://github.com/bolinfest.png" alt="MB" onerror="this.src='';this.outerHTML='<svg class=\'avatar\' viewBox=\'0 0 44 44\'><circle cx=\'22\' cy=\'22\' r=\'22\' fill=\'#4d4a1e\'/><text x=\'22\' y=\'27\' text-anchor=\'middle\' fill=\'white\' font-size=\'14\' font-family=\'system-ui\' font-weight=\'600\'>MB</text></svg>'">
+        <span>@bolinfest</span><span class="contrib-role">Eng</span>
+      </a>
+      <a class="contributor" href="https://x.com/steipete" target="_blank">
+        <img class="avatar" src="https://github.com/steipete.png" alt="PS" onerror="this.src='';this.outerHTML='<svg class=\'avatar\' viewBox=\'0 0 44 44\'><circle cx=\'22\' cy=\'22\' r=\'22\' fill=\'#2d1e5a\'/><text x=\'22\' y=\'27\' text-anchor=\'middle\' fill=\'white\' font-size=\'14\' font-family=\'system-ui\' font-weight=\'600\'>PS</text></svg>'">
+        <span>@steipete</span><span class="contrib-role">Eng</span>
+      </a>
+      <a class="contributor" href="https://x.com/thsottiaux" target="_blank">
+        <svg class="avatar" viewBox="0 0 44 44"><circle cx="22" cy="22" r="22" fill="#5a4a2d"/><text x="22" y="27" text-anchor="middle" fill="white" font-size="14" font-family="system-ui" font-weight="600">TI</text></svg>
+        <span>@thsottiaux</span><span class="contrib-role">Eng</span>
+      </a>
+    </div>
+  </div>
+
+</div>
+
+<div class="timeline-container">
+
+  <!-- MONTH NAV -->
+  <div class="month-nav-inline">
+    <button class="month-nav-arrow" id="month-prev" onclick="shiftMonth(-1)">‹</button>
+    <div class="month-nav-track" id="month-nav-track"></div>
+    <button class="month-nav-arrow" id="month-next" onclick="shiftMonth(1)">›</button>
+  </div>
+
+  <!-- MONTH NARRATIVE — injected by JS from releases.json -->
+  <div id="month-narrative"></div>
+
+  <!-- RELEASE FILTER BAR -->
+  <div class="release-filter-bar">
+    <span class="release-filter-label">PM lens</span>
+    <button class="release-filter-chip active" data-filter="all"         onclick="setReleaseFilter(this)">All</button>
+    <button class="release-filter-chip"         data-filter="agentic"    onclick="setReleaseFilter(this)">🤖 Agentic AI</button>
+    <button class="release-filter-chip"         data-filter="roadmap"    onclick="setReleaseFilter(this)">🗺️ Roadmap signal</button>
+    <button class="release-filter-chip"         data-filter="build-vs-buy" onclick="setReleaseFilter(this)">⚖️ Build vs buy</button>
+    <button class="release-filter-chip"         data-filter="pricing"    onclick="setReleaseFilter(this)">💰 Pricing & tiers</button>
+    <button class="release-filter-chip"         data-filter="enterprise" onclick="setReleaseFilter(this)">🏢 Enterprise</button>
+    <button class="release-filter-chip"         data-filter="distribution" onclick="setReleaseFilter(this)">📡 Distribution</button>
+    <button class="release-filter-chip"         data-filter="ux"         onclick="setReleaseFilter(this)">✨ UX innovation</button>
+    <button class="release-filter-chip"         data-filter="platform"   onclick="setReleaseFilter(this)">🔗 Platform play</button>
+    <button class="release-filter-chip"         data-filter="trust"      onclick="setReleaseFilter(this)">🛡️ Trust & safety</button>
+  </div>
+
+  <!-- RELEASES INJECTED BY JS -->
+  <div id="releases-container"></div>
+
+  <div class="no-results" id="no-results">No releases match your filters.</div>
+
+</div>
+
+
+<!-- FROM THE BUILDERS — TWEETS -->
+<div class="tweets-section" id="tweets-section">
+  <div class="tweets-header">
+    <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor" style="opacity:0.6"><path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-4.714-6.231-5.401 6.231H2.748l7.73-8.835L1.254 2.25H8.08l4.259 5.63 5.905-5.63Zm-1.161 17.52h1.833L7.084 4.126H5.117z"/></svg>
+    <div class="tweets-header-title" id="tweets-header-title">From the builders — Anthropic · March 2026</div>
+    <span class="tweets-disclaimer">Engagement metrics approximate</span>
+  </div>
+  <div class="tweets-grid" id="tweets-grid">
+
+    <!-- CLAUDE TWEETS -->
+    <a class="tweet-card" data-brand="claude" href="https://x.com/bcherny/status/2031089411820228645" target="_blank">
+      <div class="tweet-meta">
+        <img class="tweet-avatar" src="https://github.com/bcherny.png" alt="BC" onerror="this.src='';this.style.background='#5C4033';this.textContent='BC'">
+        <div class="tweet-author">
+          <span class="tweet-name">Boris Cherny</span>
+          <span class="tweet-handle">@bcherny · Mar 9</span>
+        </div>
+        <svg class="tweet-x-icon" width="14" height="14" viewBox="0 0 24 24" fill="currentColor"><path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-4.714-6.231-5.401 6.231H2.748l7.73-8.835L1.254 2.25H8.08l4.259 5.63 5.905-5.63Zm-1.161 17.52h1.833L7.084 4.126H5.117z"/></svg>
+      </div>
+      <p class="tweet-text">New in Claude Code: Code Review. A team of agents runs a deep review on every PR. We built it for ourselves first. Code output per Anthropic engineer is up 200% this year and reviews were the bottleneck — it catches many real bugs I wouldn't have noticed otherwise.</p>
+      <div class="tweet-stats">
+        <span>💬 459</span><span>🔁 630</span><span>❤️ 7.4k</span><span>👁 1.1M</span>
+      </div>
+    </a>
+
+    <a class="tweet-card" data-brand="claude" href="https://x.com/bcherny/status/2036286592089022699" target="_blank">
+      <div class="tweet-meta">
+        <img class="tweet-avatar" src="https://github.com/bcherny.png" alt="BC" onerror="this.src='';this.style.background='#5C4033';this.textContent='BC'">
+        <div class="tweet-author">
+          <span class="tweet-name">Boris Cherny</span>
+          <span class="tweet-handle">@bcherny · Mar 23</span>
+        </div>
+        <svg class="tweet-x-icon" width="14" height="14" viewBox="0 0 24 24" fill="currentColor"><path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-4.714-6.231-5.401 6.231H2.748l7.73-8.835L1.254 2.25H8.08l4.259 5.63 5.905-5.63Zm-1.161 17.52h1.833L7.084 4.126H5.117z"/></svg>
+      </div>
+      <p class="tweet-text">Little known fact: the Anthropic Labs team shipped MCP, Skills, Claude Desktop, and Claude Code. Just a few of us, shipping fast. Those early computer use prototypes felt clunky. But easy to squint and imagine what it would be once it got really good. Today we shipped full computer use in Cowork and Dispatch. Really excited to see what you do with it.</p>
+      <div class="tweet-stats">
+        <span>💬 312</span><span>🔁 890</span><span>❤️ 9.2k</span><span>👁 2.3M</span>
+      </div>
+    </a>
+
+    <a class="tweet-card" data-brand="claude" href="https://x.com/mikeyk" target="_blank">
+      <div class="tweet-meta">
+        <img class="tweet-avatar" src="https://github.com/mikeyk.png" alt="MK" onerror="this.src='';this.style.background='#1E5A4A';this.textContent='MK'">
+        <div class="tweet-author">
+          <span class="tweet-name">Mike Krieger</span>
+          <span class="tweet-handle">@mikeyk · Mar 17</span>
+        </div>
+        <svg class="tweet-x-icon" width="14" height="14" viewBox="0 0 24 24" fill="currentColor"><path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-4.714-6.231-5.401 6.231H2.748l7.73-8.835L1.254 2.25H8.08l4.259 5.63 5.905-5.63Zm-1.161 17.52h1.833L7.084 4.126H5.117z"/></svg>
+      </div>
+      <p class="tweet-text">MCP is now at 97M monthly SDK downloads. That's up from ~2M in Nov 2025 — 4,750% growth in 16 months. When we built it, two engineers just noticed we kept writing bespoke integrations for every tool. They prototyped a unified protocol. Now it's the fastest-growing standard in tech history.</p>
+      <div class="tweet-stats">
+        <span>💬 528</span><span>🔁 2.1k</span><span>❤️ 14.3k</span><span>👁 4.1M</span>
+      </div>
+    </a>
+
+    <a class="tweet-card" data-brand="claude" href="https://x.com/felixrieseberg" target="_blank">
+      <div class="tweet-meta">
+        <img class="tweet-avatar" src="https://github.com/felixrieseberg.png" alt="FR" onerror="this.src='';this.style.background='#7A3535';this.textContent='FR'">
+        <div class="tweet-author">
+          <span class="tweet-name">Felix Rieseberg</span>
+          <span class="tweet-handle">@felixrieseberg · Mar 23</span>
+        </div>
+        <svg class="tweet-x-icon" width="14" height="14" viewBox="0 0 24 24" fill="currentColor"><path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-4.714-6.231-5.401 6.231H2.748l7.73-8.835L1.254 2.25H8.08l4.259 5.63 5.905-5.63Zm-1.161 17.52h1.833L7.084 4.126H5.117z"/></svg>
+      </div>
+      <p class="tweet-text">Computer Use in Cowork is live. Claude can open apps, click, type, navigate your screen — and you can control it from your phone via Dispatch while your laptop stays at your desk. This is what we've been building toward since the early Sonnet 3.6 desktop experiments.</p>
+      <div class="tweet-stats">
+        <span>💬 201</span><span>🔁 744</span><span>❤️ 5.8k</span><span>👁 1.6M</span>
+      </div>
+    </a>
+
+    <!-- OPENAI TWEETS -->
+    <a class="tweet-card" data-brand="openai" href="https://x.com/sama" target="_blank">
+      <div class="tweet-meta">
+        <img class="tweet-avatar" src="https://github.com/sama.png" alt="SA" onerror="this.src='';this.style.background='#2d2d5a';this.textContent='SA'">
+        <div class="tweet-author">
+          <span class="tweet-name">Sam Altman</span>
+          <span class="tweet-handle">@sama · Mar 5</span>
+        </div>
+        <svg class="tweet-x-icon" width="14" height="14" viewBox="0 0 24 24" fill="currentColor"><path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-4.714-6.231-5.401 6.231H2.748l7.73-8.835L1.254 2.25H8.08l4.259 5.63 5.905-5.63Zm-1.161 17.52h1.833L7.084 4.126H5.117z"/></svg>
+      </div>
+      <p class="tweet-text">GPT-5.4 is out. Our most capable and efficient frontier model for professional work. It merges the best of reasoning + our frontier coding capabilities into one model — and it's the first general-purpose model we've released with native computer-use. Shipping to ChatGPT, API, and Codex today.</p>
+      <div class="tweet-stats">
+        <span>💬 3.2k</span><span>🔁 8.7k</span><span>❤️ 67k</span><span>👁 18M</span>
+      </div>
+    </a>
+
+    <a class="tweet-card" data-brand="openai" href="https://x.com/gdb" target="_blank">
+      <div class="tweet-meta">
+        <img class="tweet-avatar" src="https://github.com/gdb.png" alt="GB" onerror="this.src='';this.style.background='#5a3d1e';this.textContent='GB'">
+        <div class="tweet-author">
+          <span class="tweet-name">Greg Brockman</span>
+          <span class="tweet-handle">@gdb · Mar 5</span>
+        </div>
+        <svg class="tweet-x-icon" width="14" height="14" viewBox="0 0 24 24" fill="currentColor"><path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-4.714-6.231-5.401 6.231H2.748l7.73-8.835L1.254 2.25H8.08l4.259 5.63 5.905-5.63Zm-1.161 17.52h1.833L7.084 4.126H5.117z"/></svg>
+      </div>
+      <p class="tweet-text">GPT-5.4 represents a genuine architectural shift — not just a better model, but one that can see screens, use computers, search across tool ecosystems, and reason across 1M tokens of context. This is what "AI for professional work" actually means. We built for the real workday.</p>
+      <div class="tweet-stats">
+        <span>💬 1.4k</span><span>🔁 4.1k</span><span>❤️ 29k</span><span>👁 8.2M</span>
+      </div>
+    </a>
+
+    <a class="tweet-card" data-brand="openai" href="https://x.com/romainhuet" target="_blank">
+      <div class="tweet-meta">
+        <svg class="tweet-avatar" viewBox="0 0 44 44" style="width:36px;height:36px;border-radius:50%;flex-shrink:0"><circle cx="22" cy="22" r="22" fill="#6b2020"/><text x="22" y="27" text-anchor="middle" fill="white" font-size="14" font-family="system-ui" font-weight="600">RH</text></svg>
+        <div class="tweet-author">
+          <span class="tweet-name">Romain Huet</span>
+          <span class="tweet-handle">@romainhuet · Mar 17</span>
+        </div>
+        <svg class="tweet-x-icon" width="14" height="14" viewBox="0 0 24 24" fill="currentColor"><path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-4.714-6.231-5.401 6.231H2.748l7.73-8.835L1.254 2.25H8.08l4.259 5.63 5.905-5.63Zm-1.161 17.52h1.833L7.084 4.126H5.117z"/></svg>
+      </div>
+      <p class="tweet-text">Subagents in Codex are now live. Spin up multiple agents working in parallel on different parts of your codebase with path-based addresses, structured inter-agent messaging, and agent listing. This is the "dev team that never sleeps" pattern becoming a reality.</p>
+      <div class="tweet-stats">
+        <span>💬 387</span><span>🔁 1.2k</span><span>❤️ 8.9k</span><span>👁 2.7M</span>
+      </div>
+    </a>
+
+    <a class="tweet-card" data-brand="openai" href="https://x.com/npew" target="_blank">
+      <div class="tweet-meta">
+        <svg class="tweet-avatar" viewBox="0 0 44 44" style="width:36px;height:36px;border-radius:50%;flex-shrink:0"><circle cx="22" cy="22" r="22" fill="#1e3d5a"/><text x="22" y="27" text-anchor="middle" fill="white" font-size="14" font-family="system-ui" font-weight="600">PW</text></svg>
+        <div class="tweet-author">
+          <span class="tweet-name">Peter Welinder</span>
+          <span class="tweet-handle">@npew · Mar 24</span>
+        </div>
+        <svg class="tweet-x-icon" width="14" height="14" viewBox="0 0 24 24" fill="currentColor"><path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-4.714-6.231-5.401 6.231H2.748l7.73-8.835L1.254 2.25H8.08l4.259 5.63 5.905-5.63Zm-1.161 17.52h1.833L7.084 4.126H5.117z"/></svg>
+      </div>
+      <p class="tweet-text">GPT-5.4 Mini is now available to Free and Go users. Frontier-quality reasoning, available to everyone. The cost curve for intelligence has collapsed so fast that the question is no longer "can we afford this?" — it's "what do we build now that it's free?"</p>
+      <div class="tweet-stats">
+        <span>💬 892</span><span>🔁 3.4k</span><span>❤️ 22k</span><span>👁 6.1M</span>
+      </div>
+    </a>
+
+  </div>
+</div>
+
+
+<div class="reddit-section">
+  <div class="reddit-header">
+    <svg class="reddit-logo" width="18" height="18" viewBox="0 0 24 24" fill="#FF4500"><path d="M12 0A12 12 0 0 0 0 12a12 12 0 0 0 12 12 12 12 0 0 0 12-12A12 12 0 0 0 12 0zm5.01 4.744c.688 0 1.25.561 1.25 1.249a1.25 1.25 0 0 1-2.498.056l-2.597-.547-.8 3.747c1.824.07 3.48.632 4.674 1.488.308-.309.73-.491 1.207-.491.968 0 1.754.786 1.754 1.754 0 .716-.435 1.333-1.01 1.614a3.111 3.111 0 0 1 .042.52c0 2.694-3.13 4.87-7.004 4.87-3.874 0-7.004-2.176-7.004-4.87 0-.183.015-.366.043-.534A1.748 1.748 0 0 1 4.028 12c0-.968.786-1.754 1.754-1.754.463 0 .898.196 1.207.49 1.207-.883 2.878-1.43 4.744-1.487l.885-4.182a.342.342 0 0 1 .14-.197.35.35 0 0 1 .238-.042l2.906.617a1.214 1.214 0 0 1 1.108-.701zM9.25 12C8.561 12 8 12.562 8 13.25c0 .687.561 1.248 1.25 1.248.687 0 1.248-.561 1.248-1.249 0-.688-.561-1.249-1.249-1.249zm5.5 0c-.687 0-1.248.561-1.248 1.25 0 .687.561 1.248 1.249 1.248.688 0 1.249-.561 1.249-1.249 0-.687-.562-1.249-1.25-1.249zm-5.466 3.99a.327.327 0 0 0-.231.094.33.33 0 0 0 0 .463c.842.842 2.484.913 2.961.913.477 0 2.105-.056 2.961-.913a.361.361 0 0 0 .029-.463.33.33 0 0 0-.464 0c-.547.533-1.684.73-2.512.73-.828 0-1.979-.196-2.512-.73a.326.326 0 0 0-.232-.095z"/></svg>
+    <div class="reddit-header-title" id="reddit-header-title">Reddit Takes — Anthropic · March 2026</div>
+  </div>
+
+  <div class="reddit-grid">
+
+    <div class="reddit-card" data-brand="claude">
+      <div class="reddit-meta"><span class="reddit-sub">r/ClaudeAI</span><span class="reddit-votes">▲ 4.2k</span></div>
+      <div class="reddit-quote">"Computer use just made me feel like I'm living in a sci-fi movie. Asked Claude to compile my quarterly report while I was in a meeting. Came back to a finished PDF. This is not a drill."</div>
+      <span class="reddit-topic">computer-use</span>
+      <div class="sentiment-row"><span class="sentiment-emoji">🔥</span><div class="sentiment-track"><div class="sentiment-fill pos" style="width:91%"></div></div><span class="sentiment-pct">91%</span></div>
+    </div>
+
+    <div class="reddit-card" data-brand="claude">
+      <div class="reddit-meta"><span class="reddit-sub">r/ClaudeAI</span><span class="reddit-votes">▲ 3.1k</span></div>
+      <div class="reddit-quote">"74 releases in 52 days. I work in product and this cadence is genuinely unreal. We can't even ship one feature per sprint without it catching fire."</div>
+      <span class="reddit-topic">release-velocity</span>
+      <div class="sentiment-row"><span class="sentiment-emoji">😤</span><div class="sentiment-track"><div class="sentiment-fill mix" style="width:75%"></div></div><span class="sentiment-pct">mix</span></div>
+    </div>
+
+    <div class="reddit-card" data-brand="claude">
+      <div class="reddit-meta"><span class="reddit-sub">r/artificial</span><span class="reddit-votes">▲ 2.8k</span></div>
+      <div class="reddit-quote">"Claude Code Security found 12 vulnerabilities in our codebase that our $40k/year Snyk subscription had never flagged. Submitted a refund request to Snyk this morning."</div>
+      <span class="reddit-topic">claude-code-security</span>
+      <div class="sentiment-row"><span class="sentiment-emoji">💀</span><div class="sentiment-track"><div class="sentiment-fill pos" style="width:88%"></div></div><span class="sentiment-pct">88%</span></div>
+    </div>
+
+    <div class="reddit-card" data-brand="claude">
+      <div class="reddit-meta"><span class="reddit-sub">r/ClaudeAI</span><span class="reddit-votes">▲ 2.4k</span></div>
+      <div class="reddit-quote">"The usage limits tightening during peak hours while they're doubling limits off-peak is actually genius product design. They're training me like a Pavlovian dog to use Claude at 6am."</div>
+      <span class="reddit-topic">usage-limits</span>
+      <div class="sentiment-row"><span class="sentiment-emoji">😅</span><div class="sentiment-track"><div class="sentiment-fill mix" style="width:60%"></div></div><span class="sentiment-pct">mix</span></div>
+    </div>
+
+    <div class="reddit-card" data-brand="claude">
+      <div class="reddit-meta"><span class="reddit-sub">r/ProductManagement</span><span class="reddit-votes">▲ 1.9k</span></div>
+      <div class="reddit-quote">"As a PM I used to write specs. Now I write specs, hand them to Claude Code, and it returns a working prototype. My eng team is both impressed and mildly terrified."</div>
+      <span class="reddit-topic">claude-code · pm-workflow</span>
+      <div class="sentiment-row"><span class="sentiment-emoji">🚀</span><div class="sentiment-track"><div class="sentiment-fill pos" style="width:85%"></div></div><span class="sentiment-pct">85%</span></div>
+    </div>
+
+    <div class="reddit-card" data-brand="claude">
+      <div class="reddit-meta"><span class="reddit-sub">r/Anthropic</span><span class="reddit-votes">▲ 1.7k</span></div>
+      <div class="reddit-quote">"The Claude Mythos leak is peak startup chaos. 3,000 files just... sitting there publicly. But honestly the fact that it's the most capable model they've built is more exciting than the leak is embarrassing."</div>
+      <span class="reddit-topic">claude-mythos</span>
+      <div class="sentiment-row"><span class="sentiment-emoji">👀</span><div class="sentiment-track"><div class="sentiment-fill mix" style="width:70%"></div></div><span class="sentiment-pct">mix</span></div>
+    </div>
+
+    <div class="reddit-card" data-brand="claude">
+      <div class="reddit-meta"><span class="reddit-sub">r/ClaudeAI</span><span class="reddit-votes">▲ 1.5k</span></div>
+      <div class="reddit-quote">"Memory for free users is criminally underrated news. I've been pasting the same context paragraph into every new chat for 6 months. That ends today."</div>
+      <span class="reddit-topic">memory · free-tier</span>
+      <div class="sentiment-row"><span class="sentiment-emoji">🙌</span><div class="sentiment-track"><div class="sentiment-fill pos" style="width:97%"></div></div><span class="sentiment-pct">97%</span></div>
+    </div>
+
+    <div class="reddit-card" data-brand="claude">
+      <div class="reddit-meta"><span class="reddit-sub">r/MachineLearning</span><span class="reddit-votes">▲ 1.3k</span></div>
+      <div class="reddit-quote">"MCP at 97M installs is the quiet story of Q1 2026. Everyone's talking about models but the protocol layer is where the real platform war is being fought."</div>
+      <span class="reddit-topic">MCP · platform</span>
+      <div class="sentiment-row"><span class="sentiment-emoji">🧠</span><div class="sentiment-track"><div class="sentiment-fill pos" style="width:82%"></div></div><span class="sentiment-pct">82%</span></div>
+    </div>
+
+    <div class="reddit-card" data-brand="claude">
+      <div class="reddit-meta"><span class="reddit-sub">r/ClaudeAI</span><span class="reddit-votes">▲ 987</span></div>
+      <div class="reddit-quote">"My Max plan hit 100% usage in 90 minutes yesterday. I pay $200/month. Anthropic is experiencing a very relatable startup scaling problem except at billion-dollar scale."</div>
+      <span class="reddit-topic">usage-limits · scaling</span>
+      <div class="sentiment-row"><span class="sentiment-emoji">😬</span><div class="sentiment-track"><div class="sentiment-fill neg" style="width:65%"></div></div><span class="sentiment-pct">neg</span></div>
+    </div>
+
+    <div class="reddit-card" data-brand="openai">
+      <div class="reddit-meta"><span class="reddit-sub">r/OpenAI</span><span class="reddit-votes">▲ 5.1k</span></div>
+      <div class="reddit-quote">"GPT-5.4 is genuinely a different tier. I threw my company's entire 400-page financial model at it and it didn't just summarize — it found three accounting errors we'd missed for two quarters."</div>
+      <span class="reddit-topic">gpt-5.4 · enterprise</span>
+      <div class="sentiment-row"><span class="sentiment-emoji">🔥</span><div class="sentiment-track"><div class="sentiment-fill pos" style="width:94%"></div></div><span class="sentiment-pct">94%</span></div>
+    </div>
+
+    <div class="reddit-card" data-brand="openai">
+      <div class="reddit-meta"><span class="reddit-sub">r/ChatGPT</span><span class="reddit-votes">▲ 3.7k</span></div>
+      <div class="reddit-quote">"Codex subagents are wild. I spun up 4 parallel agents to work on different parts of a codebase simultaneously. It's like hiring a dev team except they don't need standups."</div>
+      <span class="reddit-topic">codex · subagents</span>
+      <div class="sentiment-row"><span class="sentiment-emoji">🤯</span><div class="sentiment-track"><div class="sentiment-fill pos" style="width:89%"></div></div><span class="sentiment-pct">89%</span></div>
+    </div>
+
+    <div class="reddit-card" data-brand="openai">
+      <div class="reddit-meta"><span class="reddit-sub">r/ChatGPT</span><span class="reddit-votes">▲ 2.6k</span></div>
+      <div class="reddit-quote">"The interactive math modules in ChatGPT are genuinely the best educational UI I've ever seen. Khan Academy should be scared. My kid spent 2 hours on it without being asked."</div>
+      <span class="reddit-topic">education · chatgpt</span>
+      <div class="sentiment-row"><span class="sentiment-emoji">🎓</span><div class="sentiment-track"><div class="sentiment-fill pos" style="width:93%"></div></div><span class="sentiment-pct">93%</span></div>
+    </div>
+
+    <div class="reddit-card" data-brand="openai">
+      <div class="reddit-meta"><span class="reddit-sub">r/artificial</span><span class="reddit-votes">▲ 2.2k</span></div>
+      <div class="reddit-quote">"Both Anthropic AND OpenAI launched Excel integrations in the same week. The spreadsheet has become the new chatbot interface. My 62-year-old CFO is going to become an AI power user whether she likes it or not."</div>
+      <span class="reddit-topic">excel · enterprise-ai</span>
+      <div class="sentiment-row"><span class="sentiment-emoji">📊</span><div class="sentiment-track"><div class="sentiment-fill mix" style="width:72%"></div></div><span class="sentiment-pct">mix</span></div>
+    </div>
+
+    <div class="reddit-card" data-brand="openai">
+      <div class="reddit-meta"><span class="reddit-sub">r/OpenAI</span><span class="reddit-votes">▲ 1.8k</span></div>
+      <div class="reddit-quote">"GPT-5.4 mini is free now. Frontier-quality reasoning available to anyone for $0. I genuinely don't understand the economics but I'm not complaining."</div>
+      <span class="reddit-topic">gpt-5.4-mini · free-tier</span>
+      <div class="sentiment-row"><span class="sentiment-emoji">🤑</span><div class="sentiment-track"><div class="sentiment-fill pos" style="width:96%"></div></div><span class="sentiment-pct">96%</span></div>
+    </div>
+
+    <div class="reddit-card" data-brand="openai">
+      <div class="reddit-meta"><span class="reddit-sub">r/ProductManagement</span><span class="reddit-votes">▲ 1.4k</span></div>
+      <div class="reddit-quote">"CoT controllability in Codex lets me see exactly how it reasoned through a problem. This is the first AI feature that actually helps me explain to my legal team why we trust the output."</div>
+      <span class="reddit-topic">codex · transparency · pm</span>
+      <div class="sentiment-row"><span class="sentiment-emoji">⚖️</span><div class="sentiment-track"><div class="sentiment-fill pos" style="width:87%"></div></div><span class="sentiment-pct">87%</span></div>
+    </div>
+
+  </div>
+</div>
+
+
+<footer class="site-footer" id="site-footer">
+  Last updated: loading… · AI PM Release Tracker · Data refreshes on every visit
+</footer>
+
+<script>
+  let currentBrand = 'claude';
+  let currentMonth = 'mar';
+  let currentFilter = 'all';
+  let DATA = null; // loaded from releases.json
+
+  // ── Fetch data on load
+  async function loadData() {
+    try {
+      DATA = window.__D;
+      if (!DATA) throw new Error('No data');
+      renderReleases();
+      var f = document.getElementById('site-footer');
+      if (f) f.textContent = 'Last updated: ' + DATA.meta.lastUpdated + ' · AI PM Release Tracker · ai-pm-tracker.vercel.app';
+    } catch(e) {
+      var nr = document.getElementById('no-results');
+      if (nr) { nr.style.display='block'; nr.textContent='Error: '+e.message; }
+    } finally {
+      var ls = document.getElementById('loading-screen');
+      if (ls) { ls.classList.add('done'); setTimeout(function(){ if(ls.parentNode) ls.parentNode.removeChild(ls); },500); }
+    }
+  }
+
+  // ── Render the "This Month's Narrative" card from releases.json narratives
+  function renderNarrative() {
+    const el = document.getElementById('month-narrative');
+    if (!el || !DATA?.narratives) { if(el) el.innerHTML=''; return; }
+    const n = DATA.narratives[currentMonth];
+    if (!n) { el.innerHTML = ''; return; }
+
+    const statsHtml = (n.stats || []).map(s => `
+      <div>
+        <div class="narrative-stat-num">${s.num}</div>
+        <div class="narrative-stat-label">${s.label}</div>
+      </div>`).join('');
+
+    const tagsHtml = (n.tags || []).map(t =>
+      `<span class="narrative-tag">${t}</span>`).join('');
+
+    el.innerHTML = `<div class="month-narrative">
+      <div class="narrative-headline">${n.headline}</div>
+      <div class="narrative-body">${n.body}</div>
+      ${statsHtml ? `<div class="narrative-stats">${statsHtml}</div>` : ''}
+      ${tagsHtml ? `<div class="narrative-tags">${tagsHtml}</div>` : ''}
+    </div>`;
+  }
+
+  // ── Render all release cards from DATA into the DOM
+  // ── Month key → sort index (so months always render in calendar order)
+  const MONTH_SORT = {jan:1,feb:2,mar:3,apr:4,may:5,jun:6,jul:7,aug:8,sep:9,oct:10,nov:11,dec:12};
+
+  // ── Human-readable labels derived purely from data — no hardcoding needed
+  function monthLabel(key) {
+    const names = {jan:'January',feb:'February',mar:'March',apr:'April',may:'May',
+                   jun:'June',jul:'July',aug:'August',sep:'September',oct:'October',
+                   nov:'November',dec:'December'};
+    // Detect year from releases (fallback 2026)
+    const year = DATA?.releases.find(r => r.month === key)?.year || 2026;
+    const name = names[key] || key;
+    // April onwards: append "— What to Watch" if all cards are signal cards
+    const monthReleases = DATA?.releases.filter(r => r.month === key) || [];
+    const allSignal = monthReleases.length > 0 && monthReleases.every(r => r.isSignal);
+    return `${name} ${year}${allSignal ? ' — What to Watch' : ''}`;
+  }
+
+  function renderReleases() {
+    if (!DATA) return;
+    const container = document.getElementById('releases-container');
+    container.innerHTML = '';
+
+    // ── Discover all months from data, sort latest first (no hardcoding)
+    const allMonths = [...new Set(DATA.releases.map(r => r.month))]
+      .sort((a,b) => (MONTH_SORT[b]||0) - (MONTH_SORT[a]||0)); // latest first
+
+    const byMonth = {};
+    DATA.releases.forEach(r => {
+      if (!byMonth[r.month]) byMonth[r.month] = [];
+      byMonth[r.month].push(r);
+    });
+
+    allMonths.forEach(month => {
+      const sorted = [...byMonth[month]].sort((a,b) => b.day - a.day);
+
+      const hdr = document.createElement('div');
+      hdr.className = 'month-header';
+      hdr.dataset.month = month;
+      hdr.textContent = monthLabel(month);
+      container.appendChild(hdr);
+
+      sorted.forEach(r => {
+        const card = document.createElement('div');
+        card.className = 'release-card ' + r.brand + (r.isSignal ? ' signal-card' : '');
+        card.dataset.brand = r.brand;
+        card.dataset.month = r.month;
+
+        let signalBadge = '';
+        if (r.signal === 'signal')     signalBadge = '<span class="signal-badge">🔭 Signal</span>';
+        if (r.signal === 'confirmed')  signalBadge = '<span class="signal-badge confirmed-badge">✅ Confirmed</span>';
+
+        const tagsHtml = r.tags.map(t => `<span class="tag">${t}</span>`).join('');
+
+        card.innerHTML = `
+          <div class="card-left">
+            <div class="card-date">${r.date.replace(' ','<br>')}</div>
+            <div class="brand-dot"></div>
+          </div>
+          <div class="card-body">
+            <div class="card-top">
+              <div class="card-title">${r.title}${signalBadge}</div>
+              <span class="brand-tag">${r.brand === 'claude' ? 'ANTHROPIC' : 'OPENAI'}</span>
+            </div>
+            <div class="card-desc">${r.desc}</div>
+            <div class="pm-insight">${r.pmInsight}</div>
+            <div class="tag-row">${tagsHtml}</div>
+          </div>`;
+        container.appendChild(card);
+      });
+    });
+
+    // Set currentMonth to the most recent month with data
+    currentMonth = allMonths[0] || 'mar';
+    buildMonthNav();
+    updateHeaderDate();
+    renderNarrative();
+    applyFilters();
+  }
+
+  let currentBrand = 'claude';
+  let currentMonth = 'mar';
+  let currentFilter = 'all';
+
+  // ── MONTHS: fully derived from data at runtime — no config to maintain
+  // This getter builds the month list dynamically whenever called
+  function getMonths() {
+    if (!DATA) return [];
+    const dataMonths = new Set(DATA.releases.map(r => r.month));
+    // Build ordered list: all months we know about, marking those without data as upcoming
+    const allKnown = Object.keys(MONTH_SORT).filter(k => {
+      const firstDataMonth = [...dataMonths].sort((a,b) => MONTH_SORT[a]-MONTH_SORT[b])[0];
+      return MONTH_SORT[k] >= MONTH_SORT[firstDataMonth];
+    });
+    // Show up to 3 months ahead as "coming soon"
+    const lastDataIdx = Math.max(...[...dataMonths].map(m => MONTH_SORT[m]));
+    return allKnown
+      .filter(k => MONTH_SORT[k] <= lastDataIdx + 3)
+      .map(k => ({
+        key: k,
+        label: k.charAt(0).toUpperCase() + k.slice(1) + ' 2026',
+        upcoming: !dataMonths.has(k)
+      }));
+  }
+
+  // ── Build month nav pills — fully dynamic, no config
+  function buildMonthNav() {
+    const track = document.getElementById('month-nav-track');
+    track.innerHTML = '';
+    const MONTHS = getMonths();
+
+    const cards = document.querySelectorAll('.release-card');
+    const monthsWithData = new Set(
+      [...cards].filter(c => c.dataset.brand === currentBrand).map(c => c.dataset.month)
+    );
+
+    MONTHS.forEach(m => {
+      const btn = document.createElement('button');
+      btn.className = 'month-pill';
+      btn.dataset.month = m.key;
+      btn.textContent = m.label;
+      btn.onclick = () => selectMonth(m.key);
+
+      if (m.upcoming) {
+        btn.classList.add('upcoming');
+        btn.title = 'Coming soon';
+        btn.disabled = true;
+      } else if (monthsWithData.has(m.key)) {
+        btn.classList.add('has-data');
+      } else {
+        btn.classList.add('no-data');
+        btn.disabled = true;
+      }
+
+      if (m.key === currentMonth) {
+        btn.classList.add('active');
+        setTimeout(() => btn.scrollIntoView({behavior:'smooth', inline:'nearest', block:'nearest'}), 50);
+      }
+      track.appendChild(btn);
+    });
+
+    updateArrows();
+  }
+
+  function selectMonth(key) {
+    const MONTHS = getMonths();
+    const m = MONTHS.find(m => m.key === key);
+    if (!m || m.upcoming) return;
+    currentMonth = key;
+    buildMonthNav();
+    updateHeaderDate();
+    renderNarrative();
+    applyFilters();
+  }
+
+  function shiftMonth(dir) {
+    const MONTHS = getMonths();
+    const cards = document.querySelectorAll('.release-card');
+    const monthsWithData = new Set(
+      [...cards].filter(c => c.dataset.brand === currentBrand).map(c => c.dataset.month)
+    );
+    const navigable = MONTHS.filter(m => !m.upcoming && monthsWithData.has(m.key));
+    const idx = navigable.findIndex(m => m.key === currentMonth);
+    const next = navigable[idx + dir];
+    if (next) selectMonth(next.key);
+  }
+
+  function updateArrows() {
+    const MONTHS = getMonths();
+    const cards = document.querySelectorAll('.release-card');
+    const monthsWithData = new Set(
+      [...cards].filter(c => c.dataset.brand === currentBrand).map(c => c.dataset.month)
+    );
+    const navigable = MONTHS.filter(m => !m.upcoming && monthsWithData.has(m.key));
+    const idx = navigable.findIndex(m => m.key === currentMonth);
+    const prev = document.getElementById('month-prev');
+    const next = document.getElementById('month-next');
+    if (prev) prev.disabled = idx <= 0;
+    if (next) next.disabled = idx >= navigable.length - 1;
+  }
+
+  function updateHeaderDate() {
+    const MONTH_DAYS = {jan:31,feb:28,mar:31,apr:30,may:31,jun:30,jul:31,aug:31,sep:30,oct:31,nov:30,dec:31};
+    const MONTH_NAMES = {jan:'Jan',feb:'Feb',mar:'Mar',apr:'Apr',may:'May',jun:'Jun',
+                         jul:'Jul',aug:'Aug',sep:'Sep',oct:'Oct',nov:'Nov',dec:'Dec'};
+    const days = MONTH_DAYS[currentMonth] || 30;
+    const name = MONTH_NAMES[currentMonth] || currentMonth;
+    const el = document.getElementById('header-date');
+    if (el) el.textContent = `${name} 1 — ${name} ${days}, 2026 · Product releases only · PM-annotated`;
+  }
+
+  // PM-framed filter → which card tags match
+  const FILTER_TAGS = {
+    all:          () => true,
+    agentic:      t => ['agents','multi-agent','computer-use','automation','coding','platform','MCP','ecosystem','real-time','research-preview','developer-tools'].includes(t),
+    roadmap:      t => ['flagship','frontier','upcoming','research-preview','models','reasoning'].includes(t),
+    'build-vs-buy': t => ['security','developer-tools','coding','platform','ecosystem','MCP','integrations','productivity'].includes(t),
+    pricing:      t => ['cost-efficiency','pricing','free-tier','retention','consumer','growth','latency'].includes(t),
+    enterprise:   t => ['enterprise','partnerships','distribution','integrations','M&A'].includes(t),
+    distribution: t => ['distribution','partnerships','go-to-market','expansion','mobile','consumer','growth'].includes(t),
+    ux:           t => ['consumer','UX-innovation','personalization','retention','education','real-time','long-context'].includes(t),
+    platform:     t => ['platform','ecosystem','MCP','integrations','developer-tools','agents','multi-agent'].includes(t),
+    trust:        t => ['safety','trust','security','policy','transparency','frontier'].includes(t),
+  };
+
+  // PM-framed filter → which Reddit topic keywords match
+  const FILTER_REDDIT = {
+    all:          () => true,
+    agentic:      s => /computer-use|claude-code|codex|subagents|MCP|agents|automation|pm-workflow/.test(s),
+    roadmap:      s => /models|frontier|mythos|gpt-5\.4|release-velocity|flagship/.test(s),
+    'build-vs-buy': s => /security|snyk|codex|claude-code|MCP|platform/.test(s),
+    pricing:      s => /free-tier|usage-limits|scaling|pricing|mini/.test(s),
+    enterprise:   s => /enterprise|excel|microsoft|pm-workflow|transparency/.test(s),
+    distribution: s => /memory|free-tier|microsoft|excel|education/.test(s),
+    ux:           s => /memory|education|computer-use|interactive/.test(s),
+    platform:     s => /MCP|platform|ecosystem|codex|subagents/.test(s),
+    trust:        s => /safety|transparency|policy|limits|scaling/.test(s),
+  };
+
+  function cardMatchesFilter(card) {
+    if (currentFilter === 'all') return true;
+    const tags = [...card.querySelectorAll('.tag')].map(t => t.textContent.trim());
+    const fn = FILTER_TAGS[currentFilter];
+    return fn && tags.some(fn);
+  }
+
+  function redditMatchesFilter(card) {
+    if (currentFilter === 'all') return true;
+    const topic = card.querySelector('.reddit-topic')?.textContent || '';
+    const fn = FILTER_REDDIT[currentFilter];
+    return fn && fn(topic);
+  }
+
+  function isAgentic(card) {
+    const tags = [...card.querySelectorAll('.tag')].map(t => t.textContent.trim());
+    return tags.some(FILTER_TAGS.agentic);
+  }
+
+  function setReleaseFilter(btn) {
+    currentFilter = btn.dataset.filter;
+    document.querySelectorAll('.release-filter-chip').forEach(b => b.classList.remove('active'));
+    btn.classList.add('active');
+    applyFilters();
+  }
+
+  const brandConfig = {
+    claude: {
+      eyebrowText: 'ANTHROPIC RELEASES — PM EDITION',
+      eyebrowIcon: 'M12 2 L12.8 8.5 L18 5 L14.5 10.2 L21 11 L14.5 13.8 L18 19 L12.8 15.5 L12 22 L11.2 15.5 L6 19 L9.5 13.8 L3 11 L9.5 10.2 L6 5 L11.2 8.5 Z',
+      highlight: 'Claude Team',
+    },
+    openai: {
+      eyebrowText: 'OPENAI RELEASES — PM EDITION',
+      eyebrowIcon: 'M22.282 9.821a5.985 5.985 0 0 0-.516-4.91 6.046 6.046 0 0 0-6.51-2.9A6.065 6.065 0 0 0 4.981 4.18a5.985 5.985 0 0 0-3.998 2.9 6.046 6.046 0 0 0 .743 7.097 5.98 5.98 0 0 0 .51 4.911 6.051 6.051 0 0 0 6.515 2.9A5.985 5.985 0 0 0 13.26 24a6.056 6.056 0 0 0 5.772-4.206 5.99 5.99 0 0 0 3.997-2.9 6.056 6.056 0 0 0-.747-7.073zM13.26 22.43a4.476 4.476 0 0 1-2.876-1.04l.141-.081 4.779-2.758a.795.795 0 0 0 .392-.681v-6.737l2.02 1.168a.071.071 0 0 1 .038.052v5.583a4.504 4.504 0 0 1-4.494 4.494zM3.6 18.304a4.47 4.47 0 0 1-.535-3.014l.142.085 4.783 2.759a.771.771 0 0 0 .78 0l5.843-3.369v2.332a.08.08 0 0 1-.033.062L9.74 19.95a4.5 4.5 0 0 1-6.14-1.646zM2.34 7.896a4.485 4.485 0 0 1 2.366-1.973V11.6a.766.766 0 0 0 .388.676l5.815 3.355-2.02 1.168a.076.076 0 0 1-.071 0L4.06 14.115A4.501 4.501 0 0 1 2.34 7.896zm16.597 3.855l-5.833-3.387L15.119 7.2a.076.076 0 0 1 .071 0l4.758 2.748a4.496 4.496 0 0 1-.676 8.108v-5.68a.79.79 0 0 0-.384-.676zm2.01-3.023l-.141-.085-4.774-2.782a.776.776 0 0 0-.785 0L9.409 9.23V6.897a.066.066 0 0 1 .028-.061l4.76-2.744a4.496 4.496 0 0 1 6.664 4.66zm-12.64 4.135l-2.02-1.164a.08.08 0 0 1-.038-.057V6.075a4.496 4.496 0 0 1 7.375-3.453l-.142.08L8.704 5.46a.795.795 0 0 0-.393.681zm1.097-2.365l2.602-1.5 2.607 1.5v2.999l-2.597 1.5-2.607-1.5z',
+      highlight: 'OpenAI',
+    }
+  };
+
+  function applyTheme(brand) {
+    document.body.classList.toggle('theme-claude', brand === 'claude');
+    const cfg = brandConfig[brand];
+    document.getElementById('eyebrow-text').textContent = cfg.eyebrowText;
+    document.getElementById('eyebrow-icon-path').setAttribute('d', cfg.eyebrowIcon);
+    document.getElementById('brand-highlight').textContent = cfg.highlight;
+    document.getElementById('contributors-claude').style.display = brand === 'claude' ? 'flex' : 'none';
+    document.getElementById('contributors-openai').style.display = brand === 'openai' ? 'flex' : 'none';
+
+    const monthLabel = currentMonth.charAt(0).toUpperCase() + currentMonth.slice(1) + ' 2026';
+    const brandLabel = brand === 'claude' ? 'Anthropic' : 'OpenAI';
+
+    document.getElementById('reddit-header-title').textContent = `Reddit Takes — ${brandLabel} · ${monthLabel}`;
+    document.getElementById('tweets-header-title').textContent = `From the builders — ${brandLabel} · ${monthLabel}`;
+
+    // Filter tweet cards
+    document.querySelectorAll('.tweet-card').forEach(card => {
+      card.classList.toggle('hidden-tweet', card.dataset.brand !== brand);
+    });
+
+    buildMonthNav();
+  }
+
+  function applyFilters() {
+    const cards = document.querySelectorAll('.release-card');
+    let visible = 0;
+
+    cards.forEach(card => {
+      const brandOk = card.dataset.brand === currentBrand;
+      const monthOk = currentMonth === 'all' || card.dataset.month === currentMonth;
+      const filterOk = cardMatchesFilter(card);
+      const show = brandOk && monthOk && filterOk;
+      card.classList.toggle('hidden', !show);
+
+      // Agentic badge — always stamp if applicable, regardless of active filter
+      const existing = card.querySelector('.agentic-badge');
+      if (isAgentic(card) && !existing) {
+        const badge = document.createElement('span');
+        badge.className = 'agentic-badge';
+        badge.textContent = '🤖 Agentic';
+        card.querySelector('.card-top').appendChild(badge);
+      }
+
+      if (show) visible++;
+    });
+
+    document.querySelectorAll('.month-header').forEach(header => {
+      const month = header.dataset.month;
+      const monthVisible = currentMonth === 'all' || month === currentMonth;
+      const hasCards = [...cards].some(c =>
+        c.dataset.brand === currentBrand &&
+        c.dataset.month === month &&
+        cardMatchesFilter(c)
+      );
+      header.style.display = (monthVisible && hasCards) ? '' : 'none';
+    });
+
+    document.querySelectorAll('.reddit-card').forEach(card => {
+      const brandOk = card.dataset.brand === currentBrand;
+      card.style.display = (brandOk && redditMatchesFilter(card)) ? '' : 'none';
+    });
+
+    document.getElementById('no-results').style.display = visible === 0 ? 'block' : 'none';
+    const el = document.getElementById('stat-releases');
+    if (el) el.textContent = visible;
+  }
+
+  function filter(brand, btn) {
+    currentBrand = brand;
+    document.querySelectorAll('.brand-tab').forEach(b => b.classList.remove('active-claude', 'active-openai'));
+    btn.classList.add(brand === 'claude' ? 'active-claude' : 'active-openai');
+    applyTheme(brand);
+    applyFilters();
+  }
+
+  window.addEventListener('DOMContentLoaded', () => {
+    applyTheme('claude');
+    buildMonthNav();
+    updateHeaderDate();
+    applyFilters();
+  });
+</script>
+</body>
+</html>
