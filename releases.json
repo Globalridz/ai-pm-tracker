@@ -1,0 +1,739 @@
+{
+  "meta": {
+    "lastUpdated": "2026-03-29",
+    "description": "AI PM Release Tracker — Anthropic & OpenAI, PM-annotated",
+    "version": "1.0"
+  },
+  "releases": [
+    {
+      "brand": "claude",
+      "month": "mar",
+      "date": "Mar 27",
+      "day": 27,
+      "title": "Claude Mythos — Early Access Pilot",
+      "desc": "Accidental CMS exposure revealed \"Claude Mythos\" — Anthropic's next-generation model currently in early customer pilot. Described as \"the most capable we've built.\" Adds a fourth tier above Opus. Capybara edition reportedly \"dramatically better\" at coding and security. Formal launch TBD.",
+      "pmInsight": "A new top tier above Opus changes the segmentation model. \"Frontier + premium pricing\" is a B2B strategy — think specialized security, defense, sovereign wealth fund use cases. The accidental leak is actually useful signal: it tells PMs the model is real and imminent.",
+      "tags": [
+        "models",
+        "frontier",
+        "security",
+        "upcoming"
+      ],
+      "signal": "signal",
+      "isSignal": false
+    },
+    {
+      "brand": "claude",
+      "month": "mar",
+      "date": "Mar ~26",
+      "day": 26,
+      "title": "Claude Haiku 4.5 — Fastest Model Launch",
+      "desc": "Fastest Haiku yet with near-frontier performance. Ideal for real-time, high-volume, cost-sensitive deployments. Structured outputs GA. Claude Haiku 3 deprecated (retirement Apr 19, 2026).",
+      "pmInsight": "Haiku is the model for high-volume consumer features — every autocomplete, real-time suggestion, background classification that needs to be cheap and fast. The deprecation of Haiku 3 in April forces migration: budget time for it now.",
+      "tags": [
+        "models",
+        "cost-efficiency",
+        "real-time"
+      ],
+      "signal": null,
+      "isSignal": false
+    },
+    {
+      "brand": "claude",
+      "month": "mar",
+      "date": "Mar ~25",
+      "day": 25,
+      "title": "Memory for All Users (incl. Free) + Chat Search",
+      "desc": "Memory from chat history now available to all Claude users including free tier. Cross-session context, import/export memory, search past conversations. Claude for Excel and PowerPoint add-ins now share full conversation context.",
+      "pmInsight": "Giving memory to free users is an activation and retention play — it increases the switching cost for every user, not just paid ones. The import/export feature is quietly powerful: users can now own and port their AI context. That's a trust move.",
+      "tags": [
+        "consumer",
+        "retention",
+        "personalization"
+      ],
+      "signal": null,
+      "isSignal": false
+    },
+    {
+      "brand": "claude",
+      "month": "mar",
+      "date": "Mar 25",
+      "day": 25,
+      "title": "Interactive Apps in Claude iOS & Android",
+      "desc": "The Claude mobile app can now connect to fully interactive apps — pull up live charts, sketch diagrams, and build shareable assets rendered visually inside the conversation. Available on iOS and Android.",
+      "pmInsight": "Mobile-native interactive artifacts change who uses Claude as a work tool — not just developers and analysts, but anyone with a phone. The \"shareable assets\" angle is the sleeper here: it's a collaboration surface, not just a chat.",
+      "tags": [
+        "consumer",
+        "mobile",
+        "UX-innovation"
+      ],
+      "signal": null,
+      "isSignal": false
+    },
+    {
+      "brand": "openai",
+      "month": "mar",
+      "date": "Mar 24",
+      "day": 24,
+      "title": "GPT-5.4 Mini + Nano",
+      "desc": "Smaller, efficient variants of GPT-5.4. Mini available to Free/Go users via Thinking feature; used as a rate-limit fallback for paid users. Nano targeted at cost-sensitive, high-volume deployments.",
+      "pmInsight": "The \"frontier capabilities at commodity pricing\" race is accelerating. Mini/Nano economics matter for any PM running B2C features at scale — the cost-per-interaction model changes when frontier-quality costs near-nothing.",
+      "tags": [
+        "models",
+        "consumer",
+        "cost-efficiency"
+      ],
+      "signal": null,
+      "isSignal": false
+    },
+    {
+      "brand": "openai",
+      "month": "mar",
+      "date": "Mar 24–28",
+      "day": 24,
+      "title": "ChatGPT Teen Safety Policies + Use Case Gallery",
+      "desc": "Teen Safety Policies (Mar 24) tighten guardrails for minors. Use Cases Gallery and gpt-realtime-1.5 model (Mar 27) give developers a curated library of production patterns.",
+      "pmInsight": "Safety policy updates are platform moves. Teen safety = regulatory anticipation ahead of likely EU/US age-verification laws. Use Cases Gallery is a developer acquisition play — reduce onboarding friction, increase API adoption.",
+      "tags": [
+        "safety",
+        "consumer",
+        "developer-tools",
+        "policy"
+      ],
+      "signal": null,
+      "isSignal": false
+    },
+    {
+      "brand": "claude",
+      "month": "mar",
+      "date": "Mar 23",
+      "day": 23,
+      "title": "Computer Use — Mac Research Preview (Pro &amp; Max)",
+      "desc": "Claude can now directly control a Mac: open apps, click buttons, type, and navigate screens. Available as research preview to Pro and Max users. Falls back to screen control when no direct integration exists. Works with Cowork for remote automation.",
+      "pmInsight": "This is the moment computer use becomes accessible to real users — not just API developers. \"Let Claude use your computer on your behalf while you're away\" is the killer use case for async power users. Huge implications for enterprise workflows.",
+      "tags": [
+        "computer-use",
+        "automation",
+        "research-preview"
+      ],
+      "signal": null,
+      "isSignal": false
+    },
+    {
+      "brand": "claude",
+      "month": "mar",
+      "date": "Mar ~18",
+      "day": 18,
+      "title": "Plugin Marketplace + Admin Controls (Team/Enterprise)",
+      "desc": "New plugin marketplace launched with admin controls for Team and Enterprise. Cowork gained domain-specific plugins: legal contract review, financial analysis, HR, engineering workflows. Codex CLI added PowerShell, MCP deduplication, transcript search.",
+      "pmInsight": "The plugin marketplace is a platform move — Anthropic is building an ecosystem, not just a product. For PMs, this is the bet on \"Claude as platform\" vs \"Claude as feature.\" MCP at 97M installs (4,750% growth since Nov 2025) is the distribution proof point.",
+      "tags": [
+        "platform",
+        "enterprise",
+        "ecosystem",
+        "MCP"
+      ],
+      "signal": null,
+      "isSignal": false
+    },
+    {
+      "brand": "openai",
+      "month": "mar",
+      "date": "Mar 17–21",
+      "day": 17,
+      "title": "Subagents in Codex &amp; Faster Agent Workflows",
+      "desc": "Multi-agent architecture in Codex: sub-agents with path-based addresses, structured inter-agent messaging, parallel agent listing. Codex for Students launched Mar 20. Faster Agent Workflows Mar 21.",
+      "pmInsight": "Subagents = parallel task execution. This is where agent-native PM thinking becomes mandatory — you're no longer managing a single AI doing one thing, you're orchestrating a team. Roadmap, sprint planning, and ticket triage are all fair game.",
+      "tags": [
+        "agents",
+        "multi-agent",
+        "developer-tools"
+      ],
+      "signal": null,
+      "isSignal": false
+    },
+    {
+      "brand": "claude",
+      "month": "mar",
+      "date": "Mar 17",
+      "day": 17,
+      "title": "Persistent Agent Thread — Control Cowork from Phone",
+      "desc": "Pro and Max users can now manage Cowork tasks via a persistent agent thread in Claude Desktop or mobile (iOS/Android). Assign tasks to Claude from anywhere — it keeps working on your machine while you're away. Research preview rolling out to Max first, then Pro.",
+      "pmInsight": "This is the \"remote CEO\" pattern — delegate from your phone, check back on results. For enterprise PMs, the implications for async workflows and approval gates are significant. This also stress-tests Anthropic's infrastructure at a new level.",
+      "tags": [
+        "agents",
+        "automation",
+        "mobile",
+        "research-preview"
+      ],
+      "signal": null,
+      "isSignal": false
+    },
+    {
+      "brand": "openai",
+      "month": "mar",
+      "date": "Mar 16",
+      "day": 16,
+      "title": "Interactive Math &amp; Science Learning in ChatGPT",
+      "desc": "70+ interactive visual modules for math and science topics. Adjust variables, manipulate equations, see real-time results. Builds on study mode and quizzes. Part of ChatGPT's push into education.",
+      "pmInsight": "Consumer education is a massive greenfield. Khan Academy, Duolingo — watch this space. The interactive module pattern (not just chat, but dynamic calculation) is a new UX paradigm that consumer education PMs should be prototyping now.",
+      "tags": [
+        "consumer",
+        "education",
+        "UX-innovation"
+      ],
+      "signal": null,
+      "isSignal": false
+    },
+    {
+      "brand": "claude",
+      "month": "mar",
+      "date": "Mar ~15",
+      "day": 15,
+      "title": "Claude Code — Web &amp; Mobile + Parallel Workflows",
+      "desc": "Claude Code hit the Claude.ai web and mobile apps. Developers can now kick off parallel coding workflows from any device on Anthropic-managed instances. Enterprise Analytics dashboard added to track spend and code acceptance rates.",
+      "pmInsight": "Mobile access to coding agents changes who uses them. This isn't just developers — it's anyone who needs to trigger automation from their phone. The Enterprise Analytics dashboard is the monetization unlock: visibility into ROI accelerates budget approval.",
+      "tags": [
+        "developer-tools",
+        "mobile",
+        "enterprise"
+      ],
+      "signal": null,
+      "isSignal": false
+    },
+    {
+      "brand": "openai",
+      "month": "mar",
+      "date": "Mar 14",
+      "day": 14,
+      "title": "Codex Goes Global",
+      "desc": "Codex coding agent opened to international markets. Broader availability signals OpenAI is confident in the product's stability post-GPT-5.4 integration.",
+      "pmInsight": "Global expansion is a monetization move, not an R&D move. Codex going global = OpenAI is signaling this is a serious revenue line, not a research preview.",
+      "tags": [
+        "expansion",
+        "go-to-market",
+        "developer-tools"
+      ],
+      "signal": null,
+      "isSignal": false
+    },
+    {
+      "brand": "claude",
+      "month": "mar",
+      "date": "Mar 13",
+      "day": 13,
+      "title": "Usage Limits Doubled — All Plans",
+      "desc": "Off-peak usage limits doubled across Free, Pro, Max, and Team plans from March 13 through March 28. Claude Code usage grew 300% since Claude 4 launch; run-rate revenue up 5.5x.",
+      "pmInsight": "Doubling limits is a retention and activation move — Anthropic is investing in reducing friction when users are most engaged. The 5.5x revenue growth in Claude Code is the signal that developer tooling is their highest-velocity business line.",
+      "tags": [
+        "growth",
+        "pricing",
+        "retention"
+      ],
+      "signal": null,
+      "isSignal": false
+    },
+    {
+      "brand": "claude",
+      "month": "mar",
+      "date": "Mar 12",
+      "day": 12,
+      "title": "Custom Charts & Inline Visualizations",
+      "desc": "Claude can now generate custom charts, diagrams, and data visualizations inline in responses — rendered visually right in the conversation, no export needed. Available across web and mobile.",
+      "pmInsight": "Text → chart in one step removes the biggest friction in data storytelling. For PMs, this changes what \"quick analysis\" means — you can now ask Claude to visualize a dataset mid-conversation without leaving to Tableau or Sheets.",
+      "tags": [
+        "consumer",
+        "UX-innovation",
+        "productivity"
+      ],
+      "signal": null,
+      "isSignal": false
+    },
+    {
+      "brand": "claude",
+      "month": "mar",
+      "date": "Mar 11",
+      "day": 11,
+      "title": "Claude for Excel + PowerPoint — Shared Context",
+      "desc": "Excel and PowerPoint add-ins now share full conversation context — every action Claude takes in one app is informed by everything in the other. Added support for skills and LLM gateway connections via Bedrock, Vertex AI, and Microsoft Foundry.",
+      "pmInsight": "Shared context between apps is the real unlock here — not just AI in a spreadsheet, but AI that knows what's in your deck when editing your model. This is the \"data-to-narrative\" pipeline that kills manual copy-paste workflows between tools.",
+      "tags": [
+        "productivity",
+        "enterprise",
+        "integrations"
+      ],
+      "signal": null,
+      "isSignal": false
+    },
+    {
+      "brand": "openai",
+      "month": "mar",
+      "date": "Mar 10–14",
+      "day": 10,
+      "title": "Codex Expansion Week: Themes, App Themes, CoT Controllability",
+      "desc": "Cluster of Codex updates: App Themes for UI customization, Chain-of-Thought controllability (users can inspect/guide reasoning steps), Automations GA, GPT-5.4 #1 on Cursor leaderboard. GPT-5.4 Image Encoding added Mar 13.",
+      "pmInsight": "CoT controllability is the sleeper feature here. Letting users inspect reasoning steps is a transparency play — and likely a trust driver for enterprise customers doing compliance-sensitive work.",
+      "tags": [
+        "developer-tools",
+        "transparency",
+        "reasoning"
+      ],
+      "signal": null,
+      "isSignal": false
+    },
+    {
+      "brand": "claude",
+      "month": "mar",
+      "date": "Mar 9",
+      "day": 9,
+      "title": "Microsoft 365 Copilot — Claude Sonnet Integration",
+      "desc": "Microsoft made Claude Sonnet 4.6 available inside Microsoft 365 Copilot for its users — a major enterprise distribution win. Claude now embedded in Word, Excel, Teams, and Outlook via Copilot.",
+      "pmInsight": "This is the biggest distribution move of the quarter. Microsoft 365 has 400M+ seats. Claude is now the AI in the world's most-used productivity suite for millions of enterprise users who never heard of Anthropic. Distribution &gt; product.",
+      "tags": [
+        "enterprise",
+        "partnerships",
+        "distribution"
+      ],
+      "signal": null,
+      "isSignal": false
+    },
+    {
+      "brand": "openai",
+      "month": "mar",
+      "date": "Mar 6",
+      "day": 6,
+      "title": "Codex Security — Research Preview",
+      "desc": "Security-focused coding analysis launched alongside GPT-5.4. Focuses on defensive cybersecurity. Notably, OpenAI published a blog explaining why Codex Security doesn't include a SAST report — positioning on transparency.",
+      "pmInsight": "OpenAI and Anthropic both shipped security scanning products within weeks of each other (Claude Code Security Feb 20, Codex Security Mar 6). When rivals converge this fast, the category is real — but differentiation will be everything.",
+      "tags": [
+        "security",
+        "developer-tools",
+        "research-preview"
+      ],
+      "signal": null,
+      "isSignal": false
+    },
+    {
+      "brand": "openai",
+      "month": "mar",
+      "date": "Mar 5",
+      "day": 5,
+      "title": "GPT-5.4 — Frontier Model for Professional Work",
+      "desc": "Most capable GPT release: merges reasoning + coding (GPT-5.3-Codex) capabilities. Faster, cheaper than 5.2. Excels at spreadsheets, presentations, documents. Available in ChatGPT (as \"GPT-5.4 Thinking\") and API. /fast mode in Codex gives 1.5x token velocity.",
+      "pmInsight": "The \"professional work\" positioning is deliberate — this isn't a chatbot update, it's going after enterprise software categories. The GDPval benchmark (44 occupations, real work products) is a smarter eval for PMs than MMLU. Copy this framing.",
+      "tags": [
+        "flagship",
+        "reasoning",
+        "enterprise",
+        "productivity"
+      ],
+      "signal": null,
+      "isSignal": false
+    },
+    {
+      "brand": "openai",
+      "month": "mar",
+      "date": "Mar 5",
+      "day": 5,
+      "title": "ChatGPT for Excel + Financial Data Integrations",
+      "desc": "Native Excel add-in bringing GPT-5.4 into spreadsheets. Financial data integrations added. Direct competitor to Copilot in Microsoft's own ecosystem — and to Claude for Excel.",
+      "pmInsight": "Both Anthropic and OpenAI launched Excel integrations in the same week. When both frontier labs bet on the same surface simultaneously, that's a category signal — the spreadsheet is becoming the primary enterprise AI interface.",
+      "tags": [
+        "productivity",
+        "enterprise",
+        "finance",
+        "integrations"
+      ],
+      "signal": null,
+      "isSignal": false
+    },
+    {
+      "brand": "openai",
+      "month": "mar",
+      "date": "Mar 5",
+      "day": 5,
+      "title": "Codex for Windows — First-Class Support",
+      "desc": "Codex coding agent now with full Windows support. Part of the broader Codex expansion alongside GPT-5.4 launch, targeting enterprise Windows dev environments.",
+      "pmInsight": "Winning enterprise dev = winning Windows. This is table stakes for serious B2B AI tooling — the market of developers on Windows is huge and underserved by most AI tools.",
+      "tags": [
+        "developer-tools",
+        "enterprise",
+        "platform"
+      ],
+      "signal": null,
+      "isSignal": false
+    },
+    {
+      "brand": "openai",
+      "month": "mar",
+      "date": "Mar 3",
+      "day": 3,
+      "title": "Lockdown Mode &amp; Elevated Risk Labels",
+      "desc": "Safety-first consumer features — Lockdown Mode restricts sensitive information sharing; Elevated Risk labels warn users before risky outputs. Targeted at enterprise and regulated industries.",
+      "pmInsight": "Safety UX is becoming a product differentiator, not just policy compliance. PMs in regulated verticals (health, finance, legal) should study this pattern — it signals that guardrail visibility is now a feature, not a warning label.",
+      "tags": [
+        "safety",
+        "enterprise",
+        "trust"
+      ],
+      "signal": null,
+      "isSignal": false
+    },
+    {
+      "brand": "claude",
+      "month": "apr",
+      "date": "Early Apr",
+      "day": 0,
+      "title": "Claude Mythos — General Availability",
+      "desc": "Training complete, pilot underway with security-focused enterprise customers. A new fourth tier above Opus — \"Capybara\" edition described as dramatically better at coding and vulnerability detection. Gradual rollout expected, premium pricing. Formal launch TBD.",
+      "pmInsight": "The fourth tier changes Anthropic's entire pricing architecture. Watch for a new enterprise sales motion — Mythos won't be self-serve. This is the model that makes Claude a serious defense and security vendor, not just a productivity tool.",
+      "tags": [
+        "models",
+        "frontier",
+        "security",
+        "enterprise"
+      ],
+      "signal": "signal",
+      "isSignal": true
+    },
+    {
+      "brand": "claude",
+      "month": "apr",
+      "date": "Apr 19",
+      "day": 19,
+      "title": "Claude Haiku 3 — Deprecation Deadline",
+      "desc": "Official retirement of claude-3-haiku-20240307 on April 19, 2026. Migration to Claude Haiku 4.5 required. Haiku 4.5 offers near-frontier performance at similar cost with structured outputs GA.",
+      "pmInsight": "If your team has any product built on Haiku 3, April 19 is a hard deadline. Haiku 4.5 migration should be in your sprint plan now — don't let this become an incident.",
+      "tags": [
+        "models",
+        "deprecation",
+        "developer-tools"
+      ],
+      "signal": "confirmed",
+      "isSignal": true
+    },
+    {
+      "brand": "claude",
+      "month": "apr",
+      "date": "Mid Apr",
+      "day": 0,
+      "title": "Computer Use — GA Expansion Beyond Mac",
+      "desc": "Currently research preview on macOS only for Pro/Max. Windows and broader platform support expected in April based on the Vercept acquisition trajectory and OSWorld benchmark progress (72.5% and climbing).",
+      "pmInsight": "When computer use exits research preview it becomes a default capability to design around — not an experiment. Start scoping async workflow use cases now so you're not scrambling when GA drops.",
+      "tags": [
+        "computer-use",
+        "automation",
+        "agents"
+      ],
+      "signal": "signal",
+      "isSignal": true
+    },
+    {
+      "brand": "openai",
+      "month": "apr",
+      "date": "Apr TBD",
+      "day": 0,
+      "title": "OpenAI \"Spud\" — Next Frontier Model",
+      "desc": "Pretraining complete. Sam Altman has described it internally as able to \"really accelerate the economy\" — a capability jump above GPT-5.4. Both OpenAI and Anthropic are reportedly timing major releases around planned IPOs in H2 2026.",
+      "pmInsight": "If Spud ships in April it resets the benchmark leaderboard again. PMs building on GPT-5.4 should assume a new default model is 4–6 weeks away and design upgrade paths into their architecture now.",
+      "tags": [
+        "models",
+        "frontier",
+        "roadmap"
+      ],
+      "signal": "signal",
+      "isSignal": true
+    },
+    {
+      "brand": "openai",
+      "month": "apr",
+      "date": "Apr TBD",
+      "day": 0,
+      "title": "Codex Plugins — Consumer GA",
+      "desc": "Codex plugin marketplace launched to Enterprise/Business in late March. Consumer rollout to Plus and Pro expected in April. First-class plugin workflows, MCP server configs, and reusable skill bundles will be broadly available.",
+      "pmInsight": "When Codex plugins go consumer GA, the developer workflow ecosystem locks in fast. Distribution wins go to whoever has plugins installed first. If you're building dev tools, April is your window to get into the marketplace.",
+      "tags": [
+        "platform",
+        "ecosystem",
+        "distribution",
+        "developer-tools"
+      ],
+      "signal": "signal",
+      "isSignal": true
+    }
+  ],
+  "tweets": [
+    {
+      "brand": "claude",
+      "url": "https://x.com/bcherny/status/2031089411820228645",
+      "name": "Boris Cherny",
+      "handle": "@bcherny · Mar 9",
+      "text": "New in Claude Code: Code Review. A team of agents runs a deep review on every PR. We built it for ourselves first. Code output per Anthropic engineer is up 200% this year and reviews were the bottleneck — it catches many real bugs I wouldn't have noticed otherwise.",
+      "stats": "💬 459🔁 630❤️ 7.4k👁 1.1M"
+    },
+    {
+      "brand": "claude",
+      "url": "https://x.com/bcherny/status/2036286592089022699",
+      "name": "Boris Cherny",
+      "handle": "@bcherny · Mar 23",
+      "text": "Little known fact: the Anthropic Labs team shipped MCP, Skills, Claude Desktop, and Claude Code. Just a few of us, shipping fast. Those early computer use prototypes felt clunky. But easy to squint and imagine what it would be once it got really good. Today we shipped full computer use in Cowork and Dispatch. Really excited to see what you do with it.",
+      "stats": "💬 312🔁 890❤️ 9.2k👁 2.3M"
+    },
+    {
+      "brand": "claude",
+      "url": "https://x.com/mikeyk",
+      "name": "Mike Krieger",
+      "handle": "@mikeyk · Mar 17",
+      "text": "MCP is now at 97M monthly SDK downloads. That's up from ~2M in Nov 2025 — 4,750% growth in 16 months. When we built it, two engineers just noticed we kept writing bespoke integrations for every tool. They prototyped a unified protocol. Now it's the fastest-growing standard in tech history.",
+      "stats": "💬 528🔁 2.1k❤️ 14.3k👁 4.1M"
+    },
+    {
+      "brand": "claude",
+      "url": "https://x.com/felixrieseberg",
+      "name": "Felix Rieseberg",
+      "handle": "@felixrieseberg · Mar 23",
+      "text": "Computer Use in Cowork is live. Claude can open apps, click, type, navigate your screen — and you can control it from your phone via Dispatch while your laptop stays at your desk. This is what we've been building toward since the early Sonnet 3.6 desktop experiments.",
+      "stats": "💬 201🔁 744❤️ 5.8k👁 1.6M"
+    },
+    {
+      "brand": "openai",
+      "url": "https://x.com/sama",
+      "name": "Sam Altman",
+      "handle": "@sama · Mar 5",
+      "text": "GPT-5.4 is out. Our most capable and efficient frontier model for professional work. It merges the best of reasoning + our frontier coding capabilities into one model — and it's the first general-purpose model we've released with native computer-use. Shipping to ChatGPT, API, and Codex today.",
+      "stats": "💬 3.2k🔁 8.7k❤️ 67k👁 18M"
+    },
+    {
+      "brand": "openai",
+      "url": "https://x.com/gdb",
+      "name": "Greg Brockman",
+      "handle": "@gdb · Mar 5",
+      "text": "GPT-5.4 represents a genuine architectural shift — not just a better model, but one that can see screens, use computers, search across tool ecosystems, and reason across 1M tokens of context. This is what \"AI for professional work\" actually means. We built for the real workday.",
+      "stats": "💬 1.4k🔁 4.1k❤️ 29k👁 8.2M"
+    },
+    {
+      "brand": "openai",
+      "url": "https://x.com/romainhuet",
+      "name": "Romain Huet",
+      "handle": "@romainhuet · Mar 17",
+      "text": "Subagents in Codex are now live. Spin up multiple agents working in parallel on different parts of your codebase with path-based addresses, structured inter-agent messaging, and agent listing. This is the \"dev team that never sleeps\" pattern becoming a reality.",
+      "stats": "💬 387🔁 1.2k❤️ 8.9k👁 2.7M"
+    },
+    {
+      "brand": "openai",
+      "url": "https://x.com/npew",
+      "name": "Peter Welinder",
+      "handle": "@npew · Mar 24",
+      "text": "GPT-5.4 Mini is now available to Free and Go users. Frontier-quality reasoning, available to everyone. The cost curve for intelligence has collapsed so fast that the question is no longer \"can we afford this?\" — it's \"what do we build now that it's free?\"",
+      "stats": "💬 892🔁 3.4k❤️ 22k👁 6.1M"
+    }
+  ],
+  "reddit": [
+    {
+      "brand": "claude",
+      "sub": "r/ClaudeAI",
+      "votes": "▲ 4.2k",
+      "quote": "\"Computer use just made me feel like I'm living in a sci-fi movie. Asked Claude to compile my quarterly report while I was in a meeting. Came back to a finished PDF. This is not a drill.\"",
+      "topic": "computer-use",
+      "sentiment": "pos",
+      "pct": 91,
+      "emoji": "🔥"
+    },
+    {
+      "brand": "claude",
+      "sub": "r/ClaudeAI",
+      "votes": "▲ 3.1k",
+      "quote": "\"74 releases in 52 days. I work in product and this cadence is genuinely unreal. We can't even ship one feature per sprint without it catching fire.\"",
+      "topic": "release-velocity",
+      "sentiment": "mix",
+      "pct": 75,
+      "emoji": "😤"
+    },
+    {
+      "brand": "claude",
+      "sub": "r/artificial",
+      "votes": "▲ 2.8k",
+      "quote": "\"Claude Code Security found 12 vulnerabilities in our codebase that our $40k/year Snyk subscription had never flagged. Submitted a refund request to Snyk this morning.\"",
+      "topic": "claude-code-security",
+      "sentiment": "pos",
+      "pct": 88,
+      "emoji": "💀"
+    },
+    {
+      "brand": "claude",
+      "sub": "r/ClaudeAI",
+      "votes": "▲ 2.4k",
+      "quote": "\"The usage limits tightening during peak hours while they're doubling limits off-peak is actually genius product design. They're training me like a Pavlovian dog to use Claude at 6am.\"",
+      "topic": "usage-limits",
+      "sentiment": "mix",
+      "pct": 60,
+      "emoji": "😅"
+    },
+    {
+      "brand": "claude",
+      "sub": "r/ProductManagement",
+      "votes": "▲ 1.9k",
+      "quote": "\"As a PM I used to write specs. Now I write specs, hand them to Claude Code, and it returns a working prototype. My eng team is both impressed and mildly terrified.\"",
+      "topic": "claude-code · pm-workflow",
+      "sentiment": "pos",
+      "pct": 85,
+      "emoji": "🚀"
+    },
+    {
+      "brand": "claude",
+      "sub": "r/Anthropic",
+      "votes": "▲ 1.7k",
+      "quote": "\"The Claude Mythos leak is peak startup chaos. 3,000 files just... sitting there publicly. But honestly the fact that it's the most capable model they've built is more exciting than the leak is embarrassing.\"",
+      "topic": "claude-mythos",
+      "sentiment": "mix",
+      "pct": 70,
+      "emoji": "👀"
+    },
+    {
+      "brand": "claude",
+      "sub": "r/ClaudeAI",
+      "votes": "▲ 1.5k",
+      "quote": "\"Memory for free users is criminally underrated news. I've been pasting the same context paragraph into every new chat for 6 months. That ends today.\"",
+      "topic": "memory · free-tier",
+      "sentiment": "pos",
+      "pct": 97,
+      "emoji": "🙌"
+    },
+    {
+      "brand": "claude",
+      "sub": "r/MachineLearning",
+      "votes": "▲ 1.3k",
+      "quote": "\"MCP at 97M installs is the quiet story of Q1 2026. Everyone's talking about models but the protocol layer is where the real platform war is being fought.\"",
+      "topic": "MCP · platform",
+      "sentiment": "pos",
+      "pct": 82,
+      "emoji": "🧠"
+    },
+    {
+      "brand": "claude",
+      "sub": "r/ClaudeAI",
+      "votes": "▲ 987",
+      "quote": "\"My Max plan hit 100% usage in 90 minutes yesterday. I pay $200/month. Anthropic is experiencing a very relatable startup scaling problem except at billion-dollar scale.\"",
+      "topic": "usage-limits · scaling",
+      "sentiment": "neg",
+      "pct": 65,
+      "emoji": "😬"
+    },
+    {
+      "brand": "openai",
+      "sub": "r/OpenAI",
+      "votes": "▲ 5.1k",
+      "quote": "\"GPT-5.4 is genuinely a different tier. I threw my company's entire 400-page financial model at it and it didn't just summarize — it found three accounting errors we'd missed for two quarters.\"",
+      "topic": "gpt-5.4 · enterprise",
+      "sentiment": "pos",
+      "pct": 94,
+      "emoji": "🔥"
+    },
+    {
+      "brand": "openai",
+      "sub": "r/ChatGPT",
+      "votes": "▲ 3.7k",
+      "quote": "\"Codex subagents are wild. I spun up 4 parallel agents to work on different parts of a codebase simultaneously. It's like hiring a dev team except they don't need standups.\"",
+      "topic": "codex · subagents",
+      "sentiment": "pos",
+      "pct": 89,
+      "emoji": "🤯"
+    },
+    {
+      "brand": "openai",
+      "sub": "r/ChatGPT",
+      "votes": "▲ 2.6k",
+      "quote": "\"The interactive math modules in ChatGPT are genuinely the best educational UI I've ever seen. Khan Academy should be scared. My kid spent 2 hours on it without being asked.\"",
+      "topic": "education · chatgpt",
+      "sentiment": "pos",
+      "pct": 93,
+      "emoji": "🎓"
+    },
+    {
+      "brand": "openai",
+      "sub": "r/artificial",
+      "votes": "▲ 2.2k",
+      "quote": "\"Both Anthropic AND OpenAI launched Excel integrations in the same week. The spreadsheet has become the new chatbot interface. My 62-year-old CFO is going to become an AI power user whether she likes it or not.\"",
+      "topic": "excel · enterprise-ai",
+      "sentiment": "mix",
+      "pct": 72,
+      "emoji": "📊"
+    },
+    {
+      "brand": "openai",
+      "sub": "r/OpenAI",
+      "votes": "▲ 1.8k",
+      "quote": "\"GPT-5.4 mini is free now. Frontier-quality reasoning available to anyone for $0. I genuinely don't understand the economics but I'm not complaining.\"",
+      "topic": "gpt-5.4-mini · free-tier",
+      "sentiment": "pos",
+      "pct": 96,
+      "emoji": "🤑"
+    },
+    {
+      "brand": "openai",
+      "sub": "r/ProductManagement",
+      "votes": "▲ 1.4k",
+      "quote": "\"CoT controllability in Codex lets me see exactly how it reasoned through a problem. This is the first AI feature that actually helps me explain to my legal team why we trust the output.\"",
+      "topic": "codex · transparency · pm",
+      "sentiment": "pos",
+      "pct": 87,
+      "emoji": "⚖️"
+    }
+  ],
+  "narratives": {
+    "mar": {
+      "headline": "March was the month agentic AI stopped being a demo.",
+      "body": "Both Anthropic and OpenAI shipped computer use, persistent agent threads, scheduled tasks, and parallel coding workflows — all in the same 31 days. The pattern is clear: the race is no longer about model intelligence, it's about autonomous execution. Claude can now control your Mac while you sleep. Codex can spin up four agents on your codebase simultaneously. For PMs, this changes the unit of work from 'what can AI help me write?' to 'what can I delegate and never think about again.' The products that win in this environment are the ones designed for async, not for chat.",
+      "stats": [
+        {
+          "num": "23",
+          "label": "Releases shipped"
+        },
+        {
+          "num": "2",
+          "label": "Computer use launches"
+        },
+        {
+          "num": "97M",
+          "label": "MCP monthly installs"
+        },
+        {
+          "num": "18",
+          "label": "Active ship days"
+        }
+      ],
+      "tags": [
+        "🤖 Agentic inflection point",
+        "🖥️ Computer use goes consumer",
+        "🔗 Platform wars heating up"
+      ]
+    },
+    "apr": {
+      "headline": "April is when the frontier gets expensive and the stakes get real.",
+      "body": "Claude Mythos is real, training is done, and it's priced for governments and security teams — not developers. Haiku 3 dies on April 19. OpenAI's 'Spud' is pretraining-complete and could drop any week. Both companies are burning compute faster than they can serve it, and the gap between what enterprises can afford and what individuals can access is widening. For PMs: if you haven't stress-tested your model dependencies and built upgrade paths into your architecture, April is your wake-up call.",
+      "stats": [
+        {
+          "num": "Apr 19",
+          "label": "Haiku 3 retires"
+        },
+        {
+          "num": "4th",
+          "label": "Anthropic tier incoming"
+        },
+        {
+          "num": "2",
+          "label": "Frontier models expected"
+        },
+        {
+          "num": "⚠️",
+          "label": "Migrate now"
+        }
+      ],
+      "tags": [
+        "🔭 Frontier tier above Opus",
+        "💰 Pricing pressure building",
+        "⚠️ Deprecation deadline"
+      ]
+    }
+  }
+}
